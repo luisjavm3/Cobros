@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public DateTime CreatedAt { get; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
-        public DateTime? DeleteAt { get; init; }
-        public bool IsDeleted => DeleteAt != null ? true : false;
+        public DateTime? DeletedAt { get; set; }
+        public bool IsDeleted => DeletedAt != null ? true : false;
     }
 }

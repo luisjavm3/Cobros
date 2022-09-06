@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ljdar\\DOTNET\\Cobros\\Cobros.API\\Cobros.API.csproj": {}
+    "C:\\Users\\ljdar\\DOTNET\\cobros\\Cobros.API\\Cobros.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ljdar\\DOTNET\\Cobros\\Cobros.API\\Cobros.API.csproj": {
+    "C:\\Users\\ljdar\\DOTNET\\cobros\\Cobros.API\\Cobros.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ljdar\\DOTNET\\Cobros\\Cobros.API\\Cobros.API.csproj",
+        "projectUniqueName": "C:\\Users\\ljdar\\DOTNET\\cobros\\Cobros.API\\Cobros.API.csproj",
         "projectName": "Cobros.API",
-        "projectPath": "C:\\Users\\ljdar\\DOTNET\\Cobros\\Cobros.API\\Cobros.API.csproj",
+        "projectPath": "C:\\Users\\ljdar\\DOTNET\\cobros\\Cobros.API\\Cobros.API.csproj",
         "packagesPath": "C:\\Users\\ljdar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ljdar\\DOTNET\\Cobros\\Cobros.API\\obj\\",
+        "outputPath": "C:\\Users\\ljdar\\DOTNET\\cobros\\Cobros.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
