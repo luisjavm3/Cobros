@@ -1,6 +1,9 @@
-﻿namespace Cobros.API.Repositories.Interfaces
+﻿using Cobros.API.Entities;
+
+namespace Cobros.API.Repositories.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserRepository : IRepository<User>
     {
+        Task<User> GetByUsernameAsync(string username);
     }
 }
