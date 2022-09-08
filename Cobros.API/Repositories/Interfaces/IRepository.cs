@@ -8,9 +8,9 @@ namespace Cobros.API.Repositories.Interfaces
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(int id);
+        Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate);
         Task InsertAsync(T entity);
         void Update(T entity);
         Task DeleteAsync(T entity);
-        Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate);
     }
 }
