@@ -1,5 +1,6 @@
 ﻿using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.Core.Model.DTO.Auth;
+using Cobros.API.Core.Model.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cobros.API.Controllers
@@ -16,17 +17,10 @@ namespace Cobros.API.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult> Register(AuthRegisterDto authRegisterDto)
+        public async Task<IActionResult> Register(AuthRegisterDto authRegisterDto)
         {
-            try
-            {
-                await _authBusiness.Register(authRegisterDto);
-                return Ok();
-            }
-            catch (Exception er)
-            {
-                return BadRequest(er.Message);
-            }
+            await _authBusiness.Register(authRegisterDto);
+            return Ok();
         }
     }
 }

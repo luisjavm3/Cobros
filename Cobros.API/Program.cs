@@ -1,6 +1,7 @@
 using Cobros.API.Core.Business;
 using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.DataAccess;
+using Cobros.API.Middleware;
 using Cobros.API.Repositories;
 using Cobros.API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseAuthorization();
 
