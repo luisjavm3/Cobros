@@ -23,7 +23,7 @@ namespace Cobros.API.Core.Business
             var existing = await _unitOfWork.Users.GetByUsernameAsync(authRegisterDto.Username);
 
             if (existing != null)
-                throw new BadRequestException($"Username {authRegisterDto.Username} already exists.");
+                throw new AppException($"Username {authRegisterDto.Username} already exists.");
 
             var user = _mapper.Map<User>(authRegisterDto);
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(authRegisterDto.Password);
