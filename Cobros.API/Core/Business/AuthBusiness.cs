@@ -31,5 +31,10 @@ namespace Cobros.API.Core.Business
             await _unitOfWork.Users.InsertAsync(user);
             await _unitOfWork.CompleteAsync();
         }
+
+        public Task<string> Login(AuthLoginDto authLoginDto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
