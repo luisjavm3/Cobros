@@ -1,3 +1,5 @@
+using Cobros.API.Core.Business;
+using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.DataAccess;
 using Cobros.API.Repositories;
 using Cobros.API.Repositories.Interfaces;
@@ -6,9 +8,18 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Add AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// Add Business layer
+builder.Services.AddScoped<IAuthBusiness, AuthBusiness>();
+
+// Add UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();
