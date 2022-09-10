@@ -9,12 +9,16 @@ namespace Cobros.API.Repositories
         private readonly ApplicationDbContext _applicationDbContext;
         private IDbContextTransaction? _transaction;
         public IUserRepository Users { get; }
+        public IRefreshTokenRepository RefreshTokens { get; }
+
+        //public ApplicationDbContext Context { get { return _applicationDbContext; } }
 
         public UnitOfWork(ApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
 
             Users = new UserRepository(_applicationDbContext);
+            RefreshTokens = new RefreshTokenRepository(_applicationDbContext);
         }
 
         public void BeginTransaccion()
