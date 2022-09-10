@@ -1,5 +1,6 @@
 using Cobros.API.Core.Business;
 using Cobros.API.Core.Business.Interfaces;
+using Cobros.API.Core.Helper;
 using Cobros.API.DataAccess;
 using Cobros.API.Middleware;
 using Cobros.API.Repositories;
@@ -22,6 +23,9 @@ builder.Services.AddScoped<IAuthBusiness, AuthBusiness>();
 
 // Add UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Add Not-static helpers
+builder.Services.AddScoped<IRefreshTokenHelper, RefreshTokenHelper>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

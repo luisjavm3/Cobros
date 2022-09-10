@@ -19,12 +19,14 @@ namespace Cobros.API.Core.Business
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly JwtSettings _jwtSettings;
+        private readonly IRefreshTokenHelper _refreshTokenHelper;
 
         public AuthBusiness(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _jwtSettings = configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>();
+            _refreshTokenHelper = new RefreshTokenHelper(_unitOfWork);
         }
 
         public async Task Register(AuthRegisterDto authRegisterDto)
@@ -62,7 +64,7 @@ namespace Cobros.API.Core.Business
                 _unitOfWork.BeginTransaccion();
 
                 // Remove all Refresh Tokens from a user
-                await RefreshTokenHelper.RemoveUserRefreshTokens(existing.Id, _unitOfWork);
+                await _refreshTokenHelper.RemoveUserRefreshTokens(existing.Id);
 
 
             }
