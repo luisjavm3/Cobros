@@ -9,9 +9,20 @@ namespace Cobros.API.DataAccess
         {}
 
         public DbSet<User> Users { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder
+                .Entity<User>()
+                .HasIndex(x => x.Username)
+                .IsUnique();
+
+            modelBuilder
+                .Entity<RefreshToken>()
+                .HasIndex(x => x.Value)
+                .IsUnique();
+                
             modelBuilder.SeedDB();
         }
     }
