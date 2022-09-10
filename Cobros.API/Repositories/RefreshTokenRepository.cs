@@ -20,10 +20,11 @@ namespace Cobros.API.Repositories
             return result;
         }
 
-        //public string GetRefreshToken()
-        //{
-
-        //}
+        public async Task<RefreshToken> GetByValueAsync(string value)
+        {
+            return await _applicationDbContext.RefreshTokens
+                            .FirstOrDefaultAsync(x=>x.Value.Equals(value));
+        }
 
         public void HardDelete(RefreshToken entity)
         {

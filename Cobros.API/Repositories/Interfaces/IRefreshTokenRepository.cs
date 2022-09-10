@@ -6,5 +6,6 @@ namespace Cobros.API.Repositories.Interfaces
     {
         void HardDelete(RefreshToken entity);
         Task<IEnumerable<RefreshToken>> GetAllByUserId(int userId);
+        Task<RefreshToken> GetByValueAsync(string value);
     }
 }
