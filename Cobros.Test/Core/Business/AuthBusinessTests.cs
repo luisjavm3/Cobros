@@ -13,19 +13,36 @@ namespace Cobros.Test.Core.Business
 {
     public class AuthBusinessTests
     {
-        //[Fact]
+        [Fact]
         public async void Register_IsSuccessful_WhenUsernameIsNotRepeated()
         {
             // Arrange
             var unitOfWork = new Mock<IUnitOfWork>();
             var userRepository = new Mock<IUserRepository>();
             var mapper = new Mock<IMapper>();
+
             var configuration = new Mock<IConfiguration>();
+            var keySection = new Mock<IConfigurationSection>();
+            var lifetimeMinutesSection = new Mock<IConfigurationSection>();
+            var jwtSection = new Mock<IConfigurationSection>();
+
             var notRepeatedUsername = "not_repeated_username";
 
+            keySection
+                .Setup(x => x.Value)
+                .Returns("my_long_enough_jwt_key");
+
+            lifetimeMinutesSection
+                .Setup(x => x.Value)
+                .Returns("30");
+
+            jwtSection
+                .Setup(x => x.GetChildren())
+                .Returns(new List<IConfigurationSection> { keySection.Object, lifetimeMinutesSection.Object});
+
             configuration
-                .Setup(x => x.GetSection(It.IsAny<string>()).Get<JwtSettings>())
-                .Returns(new JwtSettings { Key = "noooo", LifetimeMinutes = 30});
+                .Setup(x => x.GetSection(nameof(JwtSettings)))
+                .Returns(jwtSection.Object);
 
             userRepository
                 .Setup(x => x.GetByUsernameAsync(notRepeatedUsername))
@@ -49,15 +66,36 @@ namespace Cobros.Test.Core.Business
                 .NotThrowAsync();
         }
 
-        //[Fact]
+        [Fact]
         public async void Register_ThrowsBadRequestException_WhenUsernameIsRepeated()
         {
             // Arrange
             var unitOfWork = new Mock<IUnitOfWork>();
             var userRepository = new Mock<IUserRepository>();
             var mapper = new Mock<IMapper>();
+
             var configuration = new Mock<IConfiguration>();
+            var keySection = new Mock<IConfigurationSection>();
+            var lifetimeMinutesSection = new Mock<IConfigurationSection>();
+            var jwtSection = new Mock<IConfigurationSection>();
+
             var repeatedUsername = "repeated_username";
+
+            keySection
+               .Setup(x => x.Value)
+               .Returns("my_long_enough_jwt_key");
+
+            lifetimeMinutesSection
+                .Setup(x => x.Value)
+                .Returns("30");
+
+            jwtSection
+                .Setup(x => x.GetChildren())
+                .Returns(new List<IConfigurationSection> { keySection.Object, lifetimeMinutesSection.Object });
+
+            configuration
+                .Setup(x => x.GetSection(nameof(JwtSettings)))
+                .Returns(jwtSection.Object);
 
             userRepository
                 .Setup(x => x.GetByUsernameAsync(repeatedUsername))
