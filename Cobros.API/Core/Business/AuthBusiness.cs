@@ -9,7 +9,6 @@ using Cobros.API.Settings;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography.Xml;
 using System.Text;
 
 namespace Cobros.API.Core.Business
@@ -20,12 +19,14 @@ namespace Cobros.API.Core.Business
         private readonly IMapper _mapper;
         private readonly JwtSettings _jwtSettings;
         private readonly IRefreshTokenHelper _refreshTokenHelper;
+        private readonly IConfiguration _configuration;
 
         public AuthBusiness(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _jwtSettings = configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>();
+            _configuration = configuration;
+            _jwtSettings = _configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>();
             _refreshTokenHelper = new RefreshTokenHelper(_unitOfWork);
         }
 

@@ -1,4 +1,5 @@
-﻿using Cobros.API.Repositories.Interfaces;
+﻿using Cobros.API.Entities;
+using Cobros.API.Repositories.Interfaces;
 using System.Security.Cryptography;
 
 namespace Cobros.API.Core.Helper
@@ -36,6 +37,11 @@ namespace Cobros.API.Core.Helper
 
             return value;
         }
+
+        //public async Task<RefreshToken> GetRefreshToken(User user, string firstRefreshTokenSession = null, string previousRefreshToken = null)
+        //{
+
+        //}
 
 
     }
