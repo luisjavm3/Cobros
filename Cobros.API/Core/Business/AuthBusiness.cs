@@ -44,20 +44,20 @@ namespace Cobros.API.Core.Business
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task<string> Login(AuthLoginDto authLoginDto)
+        public async Task<LoginBussinessResponse> Login(AuthLoginDto authLoginDto)
         {
-            var existing = await _unitOfWork.Users.GetByUsernameAsync(authLoginDto.Username);
+            var existingUser = await _unitOfWork.Users.GetByUsernameAsync(authLoginDto.Username);
 
             // throw an exception if username does not exist.
-            if (existing == null)
+            if (existingUser == null)
                 throw new AppException("Wrong credentials.");
 
             // throw an exception if user was deleted.
-            if (existing.IsDeleted)
+            if (existingUser.IsDeleted)
                 throw new AppException($"Wrong credentials.");
 
             // throw an exception if password is incorrect.
-            if (!BCrypt.Net.BCrypt.Verify(authLoginDto.Password, existing.PasswordHash))
+            if (!BCrypt.Net.BCrypt.Verify(authLoginDto.Password, existingUser.PasswordHash))
                 throw new AppException("Wrong credentials.");
 
             try
@@ -65,17 +65,34 @@ namespace Cobros.API.Core.Business
                 _unitOfWork.BeginTransaccion();
 
                 // Remove all Refresh Tokens from a user
-                await _refreshTokenHelper.RemoveUserRefreshTokens(existing.Id);
+                await _refreshTokenHelper.RemoveUserRefreshTokens(existingUser.Id);
 
+                var refreshTokenValue = await _refreshTokenHelper.GetUniqueRefreshTokenValue();
 
+                var refeshToken = new RefreshToken
+                {
+                    User = existingUser,
+                    Value = refreshTokenValue,
+                    FirstRefreshTokenSession = refreshTokenValue,
+                };
+
+                await _unitOfWork.RefreshTokens.InsertAsync(refeshToken);
+                await _unitOfWork.CompleteAsync();
+                _unitOfWork.Commit();
+
+                return new LoginBussinessResponse
+                {
+                    accessToken = GetToken(existingUser.Id),
+                    refreshToken = refreshTokenValue,
+                };
             }
-            catch (Exception)
+            catch (Exception er)
             {
+                _unitOfWork.Rollback();
 
-                throw;
+                throw new Exception(er.Message);
             }
 
-            return GetToken(existing.Id);
         }
 
         private string GetToken(int userId)

@@ -22,5 +22,28 @@ namespace Cobros.API.Controllers
             await _authBusiness.Register(authRegisterDto);
             return Ok();
         }
+
+
+        /// <summary>
+        /// Set a cookie with the resfresh token and an access token.
+        /// </summary>
+        /// <param name="authLoginDto"></param>
+        /// <returns></returns>
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(AuthLoginDto authLoginDto)
+        {
+            var loginResponse = await _authBusiness.Login(authLoginDto);
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTimeOffset.UtcNow.AddDays(1),
+            };
+
+            Response.Cookies.Append("refresh_token", loginResponse.refreshToken, cookieOptions);
+
+            return Ok(loginResponse.accessToken);
+        }
+
     }
 }

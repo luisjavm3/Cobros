@@ -7,6 +7,7 @@ namespace Cobros.API.Core.Helper
     public interface IRefreshTokenHelper
     {
         Task RemoveUserRefreshTokens(int userId);
+        Task<string> GetUniqueRefreshTokenValue();
     }
 
     public class RefreshTokenHelper:IRefreshTokenHelper
