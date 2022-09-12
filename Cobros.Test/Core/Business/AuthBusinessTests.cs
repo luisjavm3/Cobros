@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Cobros.API.Core.Business;
+using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.Core.Model.DTO.Auth;
 using Cobros.API.Core.Model.Exceptions;
 using Cobros.API.Entities;
@@ -99,6 +100,95 @@ namespace Cobros.Test.Core.Business
                 .Awaiting(x => x.Register(new AuthRegisterDto { Username = repeatedUsername }))
                 .Should()
                 .ThrowAsync<AppException>();
+        }
+
+        [Fact]
+        public async void Login_ThrownsExceptions_WhenUserDoesNotExist()
+        {
+            // Arrange
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var userRespositoryMock = new Mock<IUserRepository>();
+            var mapperMock = new Mock<IMapper>();
+            var configurationMock = new Mock<IConfiguration>();
+
+            userRespositoryMock
+                .Setup(x=>x.GetByUsernameAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult<User>(null));
+
+            unitOfWorkMock
+                .Setup(x => x.Users)
+                .Returns(userRespositoryMock.Object);
+
+            SetupJwtConfiguration(configurationMock);
+
+            var sut = new AuthBusiness(unitOfWorkMock.Object, mapperMock.Object, configurationMock.Object);
+
+            // Act -Assert
+            await sut
+                .Awaiting(x => x.Login(new AuthLoginDto { }))
+                .Should()
+                .ThrowAsync<AppException>()
+                .WithMessage("Wrong credentials.");
+        }
+        
+        [Fact]
+        public async void Login_ThrownsExceptions_WhenUserIsSoftDeleted()
+        {
+            // Arrange
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var userRespositoryMock = new Mock<IUserRepository>();
+            var mapperMock = new Mock<IMapper>();
+            var configurationMock = new Mock<IConfiguration>();
+
+            // Setting DaletedAt means User is soft deleted
+            userRespositoryMock
+                .Setup(x=>x.GetByUsernameAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult<User>(new User { DeletedAt = DateTime.Now.AddMinutes(-1)}));
+
+            unitOfWorkMock
+                .Setup(x => x.Users)
+                .Returns(userRespositoryMock.Object);
+
+            SetupJwtConfiguration(configurationMock);
+
+            var sut = new AuthBusiness(unitOfWorkMock.Object, mapperMock.Object, configurationMock.Object);
+
+            // Act -Assert
+            await sut
+                .Awaiting(x => x.Login(new AuthLoginDto { }))
+                .Should()
+                .ThrowAsync<AppException>()
+                .WithMessage("Wrong credentials.");
+        }
+        
+        [Fact]
+        public async void Login_ThrownsExceptions_WhenCredentialsAreWrong()
+        {
+            // Arrange
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var userRespositoryMock = new Mock<IUserRepository>();
+            var mapperMock = new Mock<IMapper>();
+            var configurationMock = new Mock<IConfiguration>();
+
+            // This hash is an incorrect one.
+            userRespositoryMock
+                .Setup(x=>x.GetByUsernameAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult<User>(new User { PasswordHash = "$2a$12$NJFueFwYgUGaE5So851wfeEPnca/JsMEvF0MfwIxrlsozAruJQX5C" }));
+
+            unitOfWorkMock
+                .Setup(x => x.Users)
+                .Returns(userRespositoryMock.Object);
+
+            SetupJwtConfiguration(configurationMock);
+
+            var sut = new AuthBusiness(unitOfWorkMock.Object, mapperMock.Object, configurationMock.Object);
+
+            // Act -Assert
+            await sut
+                .Awaiting(x => x.Login(new AuthLoginDto { Password="any"}))
+                .Should()
+                .ThrowAsync<AppException>()
+                .WithMessage("Wrong credentials.");
         }
     }
 }
