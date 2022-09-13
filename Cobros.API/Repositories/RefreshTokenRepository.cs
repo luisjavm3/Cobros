@@ -23,6 +23,7 @@ namespace Cobros.API.Repositories
         public async Task<RefreshToken> GetByValueAsync(string value)
         {
             return await _applicationDbContext.RefreshTokens
+                            .Include(x=>x.User)
                             .FirstOrDefaultAsync(x=>x.Value.Equals(value));
         }
 

@@ -32,18 +32,35 @@ namespace Cobros.API.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login(AuthLoginDto authLoginDto)
         {
-            var loginResponse = await _authBusiness.Login(authLoginDto);
+            var tokens = await _authBusiness.Login(authLoginDto);
 
+            SetCookie(tokens.RefreshToken);
+            return Ok(tokens.AccessToken);
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refresh_token"];
+
+            if (refreshToken == null)
+                return BadRequest(new { message = "No cookie was found with refresh token." });
+
+            var tokens = await _authBusiness.RefreshToken(refreshToken);
+
+            SetCookie(tokens.RefreshToken);
+            return Ok(tokens.AccessToken);
+        }
+
+        private void SetCookie(string refreshToken)
+        {
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
                 Expires = DateTimeOffset.UtcNow.AddDays(1),
             };
 
-            Response.Cookies.Append("refresh_token", loginResponse.refreshToken, cookieOptions);
-
-            return Ok(loginResponse.accessToken);
+            Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
         }
-
     }
 }

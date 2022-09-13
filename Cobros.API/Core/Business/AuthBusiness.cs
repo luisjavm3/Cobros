@@ -44,7 +44,7 @@ namespace Cobros.API.Core.Business
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task<LoginBussinessResponse> Login(AuthLoginDto authLoginDto)
+        public async Task<TokensResponse> Login(AuthLoginDto authLoginDto)
         {
             var existingUser = await _unitOfWork.Users.GetByUsernameAsync(authLoginDto.Username);
 
@@ -66,6 +66,7 @@ namespace Cobros.API.Core.Business
 
                 // Remove all Refresh Tokens from a user
                 await _refreshTokenHelper.RemoveUserRefreshTokens(existingUser.Id);
+                await _unitOfWork.CompleteAsync();
 
                 var refreshTokenValue = await _refreshTokenHelper.GetUniqueRefreshTokenValue();
 
@@ -80,10 +81,10 @@ namespace Cobros.API.Core.Business
                 await _unitOfWork.CompleteAsync();
                 _unitOfWork.Commit();
 
-                return new LoginBussinessResponse
+                return new TokensResponse
                 {
-                    accessToken = GetToken(existingUser.Id),
-                    refreshToken = refreshTokenValue,
+                    AccessToken = GetToken(existingUser.Id),
+                    RefreshToken = refreshTokenValue,
                 };
             }
             catch (Exception er)
@@ -92,6 +93,70 @@ namespace Cobros.API.Core.Business
 
                 throw new Exception(er.Message);
             }
+
+        }
+
+        public async Task<TokensResponse> RefreshToken(string refreshToken)
+        {
+            var existingRefreshToken = await _unitOfWork.RefreshTokens.GetByValueAsync(refreshToken);
+
+            if (existingRefreshToken == null)
+                throw new AppException($"Refresh token: {refreshToken} does not exist.");
+
+            if(existingRefreshToken.IsExpired)
+            {
+                existingRefreshToken.ReasonRevoked = "Refresh token attempt when token expired.";
+                existingRefreshToken.DeletedAt = DateTime.UtcNow;
+                _unitOfWork.RefreshTokens.Update(existingRefreshToken);
+                await _unitOfWork.CompleteAsync();
+
+                throw new AppException($"Refresh token: {refreshToken} expired.");
+            }
+
+            if(existingRefreshToken.IsRevoked)
+            {
+                await _refreshTokenHelper.RemoveUserRefreshTokens(existingRefreshToken.User.Id);
+                await _unitOfWork.CompleteAsync();
+                throw new AppException($"Refresh token: {refreshToken} revoked.");
+            }
+
+            // Rotate refresh token.
+            try
+            {
+                _unitOfWork.BeginTransaccion();
+
+                existingRefreshToken.ReasonRevoked = "Refresh token rotated.";
+
+                var newRefrehToken = new RefreshToken
+                {
+                    User = existingRefreshToken.User,
+                    Value = await _refreshTokenHelper.GetUniqueRefreshTokenValue(),
+                    PreviousRefeshToken = existingRefreshToken.Value,
+                    FirstRefreshTokenSession = existingRefreshToken.FirstRefreshTokenSession,
+                };
+
+                _unitOfWork.RefreshTokens.Update(existingRefreshToken);
+                await _unitOfWork.RefreshTokens.InsertAsync(newRefrehToken);
+                await _unitOfWork.CompleteAsync();
+                _unitOfWork.Commit();
+
+                return new TokensResponse
+                {
+                    AccessToken = GetToken(existingRefreshToken.User.Id),
+                    RefreshToken = newRefrehToken.Value
+                };
+            }
+            catch (Exception er)
+            {
+                _unitOfWork.Rollback();
+                throw new Exception(er.Message + er.StackTrace);
+            }
+        }
+
+        public async Task RevokeRefrehToken(string refreshToken)
+        {
+            var existing = await _unitOfWork.RefreshTokens.GetByValueAsync(refreshToken);
+
 
         }
 
@@ -116,5 +181,6 @@ namespace Cobros.API.Core.Business
 
             return tokenHandler.WriteToken(token);
         }
+
     }
 }

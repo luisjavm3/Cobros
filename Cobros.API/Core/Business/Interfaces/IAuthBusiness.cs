@@ -5,6 +5,8 @@ namespace Cobros.API.Core.Business.Interfaces
     public interface IAuthBusiness
     {
         Task Register(AuthRegisterDto authRegisterDto);
-        Task<LoginBussinessResponse> Login(AuthLoginDto authLoginDto);
+        Task<TokensResponse> Login(AuthLoginDto authLoginDto);
+        Task<TokensResponse> RefreshToken(string refreshToken);
+        Task RevokeRefreshToken(string refreshToken);
     }
 }

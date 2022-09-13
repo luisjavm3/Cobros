@@ -2,12 +2,12 @@
 
 namespace Cobros.API.Core.Model.DTO.Auth
 {
-    public class LoginBussinessResponse
+    public class TokensResponse
     {
         [Required]
-        public string accessToken { get; set; }
+        public string AccessToken { get; set; }
 
         [Required]
-        public string refreshToken { get; set; }
+        public string RefreshToken { get; set; }
     }
 }
