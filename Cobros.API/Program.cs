@@ -42,6 +42,7 @@ builder.Services.AddAuthentication(options =>
 
 // Add Business layer
 builder.Services.AddScoped<IAuthBusiness, AuthBusiness>();
+builder.Services.AddScoped<IUserBusiness, UserBusiness >();
 
 // Add UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -68,6 +69,7 @@ app.UseHttpsRedirection();
 app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseAuthentication();
+app.UseMiddleware<UserMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
