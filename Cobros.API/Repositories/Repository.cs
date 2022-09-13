@@ -23,10 +23,9 @@ namespace Cobros.API.Repositories
             var existing = await _dbSet.FirstOrDefaultAsync(x=>x.Id == entity.Id);
 
             if (existing == null)
-                throw new NotFoundException($"{typeof(T).Name} not found.");
+                throw new NotFoundException($"{typeof(T).Name} with Id: {entity.Id} not found.");
 
-            // Soft Deletion
-            existing.DeletedAt = DateTime.UtcNow;
+            _dbSet.Remove(existing);
         }
 
         public async Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate)
@@ -41,12 +40,7 @@ namespace Cobros.API.Repositories
 
         public async Task<T> GetByIdAsync(int id)
         {
-            var existing = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (existing == null)
-                throw new NotFoundException($"{typeof(T).Name} not found.");
-
-            return existing;
+            return await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task InsertAsync(T entity)
