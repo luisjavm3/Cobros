@@ -153,7 +153,7 @@ namespace Cobros.API.Core.Business
             }
         }
 
-        public async Task RevokeRefrehToken(string refreshToken)
+        public async Task RevokeRefreshToken(string refreshToken)
         {
             var existing = await _unitOfWork.RefreshTokens.GetByValueAsync(refreshToken);
 

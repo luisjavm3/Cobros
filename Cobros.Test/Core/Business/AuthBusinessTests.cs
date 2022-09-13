@@ -190,5 +190,30 @@ namespace Cobros.Test.Core.Business
                 .ThrowAsync<AppException>()
                 .WithMessage("Wrong credentials.");
         }
+
+        //public async void Login_ReturnsValidAccessTokenAndRefreshToken_OnSuccess()
+        //{
+        //    // Arrange
+        //    var unitOfWorkMock = new Mock<IUnitOfWork>();
+        //    var userRespositoryMock = new Mock<IUserRepository>();
+        //    var mapperMock = new Mock<IMapper>();
+        //    var configurationMock = new Mock<IConfiguration>();
+
+        //    // PasswordHass turns into 123456 readable password.
+        //    userRespositoryMock
+        //        .Setup(x => x.GetByUsernameAsync(It.IsAny<string>()))
+        //        .Returns(Task.FromResult<User>(new User { Id = 1, PasswordHash = "$2a$11$kAUGjo2mVK6J/dB5fKBAIubhQSgCb1tpf/StIhappw8keWRk1uXjC" }));
+
+        //    unitOfWorkMock
+        //        .Setup(x => x.Users)
+        //        .Returns(userRespositoryMock.Object);
+
+        //    SetupJwtConfiguration(configurationMock);
+
+        //    var sut = new AuthBusiness(unitOfWorkMock.Object, mapperMock.Object, configurationMock.Object).Login;
+
+        //    // Act
+        //    await sut(new AuthLoginDto { Password = "123456" });
+        //}
     }
 }
