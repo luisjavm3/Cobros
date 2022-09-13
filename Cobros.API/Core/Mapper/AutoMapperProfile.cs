@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Cobros.API.Core.Model.DTO.Auth;
+using Cobros.API.Core.Model.DTO.User;
 using Cobros.API.Entities;
 
 namespace Cobros.API.Core.Mapper
@@ -9,6 +10,7 @@ namespace Cobros.API.Core.Mapper
         public AutoMapperProfile()
         {
             CreateMap<AuthRegisterDto, User>();
+            CreateMap<User, UserDto>();
         }
     }
 }

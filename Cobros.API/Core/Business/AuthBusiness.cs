@@ -157,7 +157,12 @@ namespace Cobros.API.Core.Business
         {
             var existing = await _unitOfWork.RefreshTokens.GetByValueAsync(refreshToken);
 
+            if (existing == null)
+                return;
 
+            existing.ReasonRevoked = "Revoked by user - Logout";
+            _unitOfWork.RefreshTokens.Update(existing);
+            await _unitOfWork.CompleteAsync();
         }
 
         private string GetToken(int userId)
