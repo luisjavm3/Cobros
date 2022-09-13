@@ -24,7 +24,7 @@ namespace Cobros.API.Core.Helper
             var rTokens = await _unitOfWork.RefreshTokens.GetAllByUserId(userId);
 
             foreach (var rToken in rTokens)
-                _unitOfWork.RefreshTokens.HardDelete(rToken);
+                await _unitOfWork.RefreshTokens.DeleteAsync(rToken);
         }
 
         public async Task<string> GetUniqueRefreshTokenValue()
@@ -38,12 +38,5 @@ namespace Cobros.API.Core.Helper
 
             return value;
         }
-
-        //public async Task<RefreshToken> GetRefreshToken(User user, string firstRefreshTokenSession = null, string previousRefreshToken = null)
-        //{
-
-        //}
-
-
     }
 }

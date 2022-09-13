@@ -26,10 +26,5 @@ namespace Cobros.API.Repositories
                             .Include(x=>x.User)
                             .FirstOrDefaultAsync(x=>x.Value.Equals(value));
         }
-
-        public void HardDelete(RefreshToken entity)
-        {
-            _applicationDbContext.RefreshTokens.Remove(entity);
-        }
     }
 }
