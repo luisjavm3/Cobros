@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Cobros.API.Core.Business.Interfaces;
+using Cobros.API.Core.Model;
 using Cobros.API.Core.Model.DTO.User;
 using Cobros.API.Core.Model.Exceptions;
 using Cobros.API.Repositories.Interfaces;
@@ -24,9 +25,14 @@ namespace Cobros.API.Core.Business
             if (existing == null)
                 throw new NotFoundException($"User with Id: {id} not found.");
 
-            var result = _mapper.Map<UserDto>(existing);
+            return _mapper.Map<UserDto>(existing);
+        }
 
-            return result;
+        public async Task<IEnumerable<UserDto>> GetRangeOfUsers(PaginationParameters paginationParameters)
+        {
+            var users = await _unitOfWork.Users.GetRangeOfUser(paginationParameters);
+
+            return _mapper.Map<IEnumerable<UserDto>>(users);
         }
     }
 }
