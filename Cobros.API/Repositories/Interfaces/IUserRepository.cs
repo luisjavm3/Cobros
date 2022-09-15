@@ -6,6 +6,6 @@ namespace Cobros.API.Repositories.Interfaces
     public interface IUserRepository : IRepository<User>
     {
         Task<User> GetByUsernameAsync(string username);
-        Task<IEnumerable<User>> GetRangeOfUser(PaginationParameters pagination);
+        Task<PagedList<User>> GetRangeOfUser(PaginationParameters paginationParameters);
     }
 }
