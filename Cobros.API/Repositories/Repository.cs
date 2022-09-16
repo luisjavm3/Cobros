@@ -20,7 +20,7 @@ namespace Cobros.API.Repositories
 
         public async Task DeleteAsync(T entity)
         {
-            var existing = await _dbSet.FirstOrDefaultAsync(x=>x.Id == entity.Id);
+            var existing = await _dbSet.FirstOrDefaultAsync(x => x.Id == entity.Id);
 
             if (existing == null)
                 throw new NotFoundException($"{typeof(T).Name} with Id: {entity.Id} not found.");
@@ -51,6 +51,11 @@ namespace Cobros.API.Repositories
         public void Update(T entity)
         {
             _applicationDbContext.Entry(entity).State = EntityState.Modified;
+        }
+
+        public async Task<int> CountAsync()
+        {
+            return await _dbSet.CountAsync();
         }
     }
 }

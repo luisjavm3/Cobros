@@ -12,5 +12,6 @@ namespace Cobros.API.Repositories.Interfaces
         Task InsertAsync(T entity);
         void Update(T entity);
         Task DeleteAsync(T entity);
+        Task<int> CountAsync();
     }
 }

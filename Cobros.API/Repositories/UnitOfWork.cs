@@ -7,7 +7,7 @@ namespace Cobros.API.Repositories
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private readonly ApplicationDbContext _applicationDbContext;
-        private IDbContextTransaction? _transaction;
+        private IDbContextTransaction _transaction;
         public IUserRepository Users { get; }
         public IRefreshTokenRepository RefreshTokens { get; }
 
