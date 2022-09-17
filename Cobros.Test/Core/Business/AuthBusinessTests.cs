@@ -1,55 +1,25 @@
-﻿using AutoMapper;
-using Cobros.API.Core.Business;
+﻿using Cobros.API.Core.Business;
 using Cobros.API.Core.Model.DTO.Auth;
 using Cobros.API.Core.Model.Exceptions;
-using Cobros.API.Entities;
-using Cobros.API.Repositories.Interfaces;
-using Cobros.API.Settings;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
-using Moq;
-using System.Text.Json;
 
 namespace Cobros.Test.Core.Business
 {
     public class AuthBusinessTests
     {
-        private void SetupJwtConfiguration(Mock<IConfiguration> configurationMock)
-        {
-            var keySection = new Mock<IConfigurationSection>();
-            var lifetimeMinutesSection = new Mock<IConfigurationSection>();
-            var jwtSection = new Mock<IConfigurationSection>();
-
-            keySection
-                .Setup(x => x.Value)
-                .Returns("my_long_enough_jwt_key");
-
-            lifetimeMinutesSection
-                .Setup(x => x.Value)
-                .Returns("30");
-
-            jwtSection
-                .Setup(x => x.GetChildren())
-                .Returns(new List<IConfigurationSection> { keySection.Object, lifetimeMinutesSection.Object });
-
-            configurationMock
-                .Setup(x => x.GetSection(nameof(JwtSettings)))
-                .Returns(jwtSection.Object);
-        }
-
         [Fact]
         public async void Register_IsSuccessful_WhenUsernameNotExists()
         {
             // Arrange
             var helper = new TestHelpers();
             var unitOfWork = helper.GetUnitOfWork();
-            var mapper = helper.GetAutoMapperInstance();
-            var configuration = new Mock<IConfiguration>();
-            SetupJwtConfiguration(configuration);
+            var mapper = helper.GetMapper();
+            var configuration = new ConfigurationBuilder().Build();
 
             AuthRegisterDto authRegisterDto = new() { Username = "not_repeated_username", Password = "123456" };
 
-            var sut = new AuthBusiness(unitOfWork, mapper, configuration.Object);
+            var sut = new AuthBusiness(unitOfWork, mapper, configuration);
 
             // Act - Assert
             await sut
@@ -64,13 +34,12 @@ namespace Cobros.Test.Core.Business
             // Arrange
             var helper = new TestHelpers();
             var unitOfWork = helper.GetUnitOfWork();
-            var mapper = helper.GetAutoMapperInstance();
-            var configuration = new Mock<IConfiguration>();
-            SetupJwtConfiguration(configuration);
+            var mapper = helper.GetMapper();
+            var configuration= new ConfigurationBuilder().Build();
 
             var authRegisterDto = new AuthRegisterDto { Username = "User1", Password="123456"};
 
-            var sut = new AuthBusiness(unitOfWork, mapper, configuration.Object);
+            var sut = new AuthBusiness(unitOfWork, mapper, configuration);
 
             // Act - Assert
             await sut
@@ -80,89 +49,64 @@ namespace Cobros.Test.Core.Business
         }
 
         [Fact]
-        public async void Login_ThrownsExceptions_WhenUserDoesNotExist()
+        public async void Login_ThrownsExceptions_WhenUserNotExists()
         {
             // Arrange
-            var unitOfWorkMock = new Mock<IUnitOfWork>();
-            var userRespositoryMock = new Mock<IUserRepository>();
-            var mapperMock = new Mock<IMapper>();
-            var configurationMock = new Mock<IConfiguration>();
+            var helper = new TestHelpers();
+            var unitOfWork = helper.GetUnitOfWork();
+            var mapper = helper.GetMapper();
+            var configuration = new ConfigurationBuilder().Build();
+            var authLoginDto = new AuthLoginDto { Username = "not_esisting_username_", Password = "123456" };
 
-            userRespositoryMock
-                .Setup(x=>x.GetByUsernameAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult<User>(null));
-
-            unitOfWorkMock
-                .Setup(x => x.Users)
-                .Returns(userRespositoryMock.Object);
-
-            SetupJwtConfiguration(configurationMock);
-
-            var sut = new AuthBusiness(unitOfWorkMock.Object, mapperMock.Object, configurationMock.Object);
+            var sut = new AuthBusiness(unitOfWork, mapper, configuration);
 
             // Act -Assert
             await sut
-                .Awaiting(x => x.Login(new AuthLoginDto { }))
+                .Awaiting(x => x.Login(authLoginDto))
                 .Should()
                 .ThrowAsync<AppException>()
                 .WithMessage("Wrong credentials.");
         }
-        
+
         [Fact]
         public async void Login_ThrownsExceptions_WhenUserIsSoftDeleted()
         {
             // Arrange
-            var unitOfWorkMock = new Mock<IUnitOfWork>();
-            var userRespositoryMock = new Mock<IUserRepository>();
-            var mapperMock = new Mock<IMapper>();
-            var configurationMock = new Mock<IConfiguration>();
+            var helper = new TestHelpers();
+            var unitOfWork = helper.GetUnitOfWork();
+            var mapper = helper.GetMapper();
+            var configuration = new ConfigurationBuilder().Build();
+            var authLoginDto = new AuthLoginDto { Username = "User5", Password = "123456"};
+            // Soft Delete User with username User5
+            var toSoftDelete = await unitOfWork.Users.GetByUsernameAsync("User5");
+            toSoftDelete.DeletedAt = DateTime.UtcNow;
 
-            // Setting DaletedAt means User is soft deleted
-            userRespositoryMock
-                .Setup(x=>x.GetByUsernameAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult<User>(new User { DeletedAt = DateTime.Now.AddMinutes(-1)}));
-
-            unitOfWorkMock
-                .Setup(x => x.Users)
-                .Returns(userRespositoryMock.Object);
-
-            SetupJwtConfiguration(configurationMock);
-
-            var sut = new AuthBusiness(unitOfWorkMock.Object, mapperMock.Object, configurationMock.Object);
+            var sut = new AuthBusiness(unitOfWork, mapper, configuration);
 
             // Act -Assert
             await sut
-                .Awaiting(x => x.Login(new AuthLoginDto { }))
+                .Awaiting(x => x.Login(authLoginDto))
                 .Should()
                 .ThrowAsync<AppException>()
                 .WithMessage("Wrong credentials.");
         }
-        
+
         [Fact]
         public async void Login_ThrownsExceptions_WhenCredentialsAreWrong()
         {
             // Arrange
-            var unitOfWorkMock = new Mock<IUnitOfWork>();
-            var userRespositoryMock = new Mock<IUserRepository>();
-            var mapperMock = new Mock<IMapper>();
-            var configurationMock = new Mock<IConfiguration>();
+            var helper = new TestHelpers();
+            var unitOfWork = helper.GetUnitOfWork();
+            var mapper = helper.GetMapper();
+            var configuration = new ConfigurationBuilder().Build();
+            // Wrong password.
+            var authLoginDto = new AuthLoginDto { Username = "User1", Password = "1234567" };
 
-            // This hash is an incorrect one.
-            userRespositoryMock
-                .Setup(x=>x.GetByUsernameAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult<User>(new User { PasswordHash = "$2a$12$NJFueFwYgUGaE5So851wfeEPnca/JsMEvF0MfwIxrlsozAruJQX5C" }));
-
-            unitOfWorkMock
-                .Setup(x => x.Users)
-                .Returns(userRespositoryMock.Object);
-
-            SetupJwtConfiguration(configurationMock);
-
-            var sut = new AuthBusiness(unitOfWorkMock.Object, mapperMock.Object, configurationMock.Object);
+            var sut = new AuthBusiness(unitOfWork, mapper, configuration);
 
             // Act -Assert
             await sut
-                .Awaiting(x => x.Login(new AuthLoginDto { Password="any"}))
+                .Awaiting(x => x.Login(authLoginDto))
                 .Should()
                 .ThrowAsync<AppException>()
                 .WithMessage("Wrong credentials.");

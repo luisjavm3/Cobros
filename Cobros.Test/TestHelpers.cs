@@ -32,7 +32,7 @@ namespace Cobros.Test
             return new UnitOfWork(_applicationDbContext);
         }
 
-        public IMapper GetAutoMapperInstance()
+        public IMapper GetMapper()
         {
             var mapperConfiguration = new MapperConfiguration(options => options.AddProfile(new AutoMapperProfile()));
             return new Mapper(mapperConfiguration);
