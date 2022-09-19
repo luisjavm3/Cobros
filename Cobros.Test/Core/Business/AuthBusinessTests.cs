@@ -3,9 +3,7 @@ using Cobros.API.Core.Model.DTO.Auth;
 using Cobros.API.Core.Model.Exceptions;
 using Cobros.API.Entities;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System.Text;
 
 namespace Cobros.Test.Core.Business
 {

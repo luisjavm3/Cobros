@@ -44,25 +44,8 @@ namespace Cobros.Test
 
         public IConfiguration GetConfiguration()
         {
-            var appsettings = @"{
-                  ""Logging"": {
-                    ""LogLevel"": {
-                      ""Default"": ""Information"",
-                      ""Microsoft.AspNetCore"": ""Warning""
-                    }
-                  },
-                  ""ConnectionStrings"": {
-                    ""DefaultConnection"": ""Server=DESKTOP-AHB8AM9\\SQLEXPRESS;Database=cobros;Trusted_Connection=true;""
-                  },
-                  ""JwtSettings"": {
-                    ""Key"": ""my_long_enough_jwt_secrect_123"",
-                    ""LifetimeMinutes"": 30
-                  },
-                  ""AllowedHosts"": ""*""
-                }";
-
             return new ConfigurationBuilder()
-                        .AddJsonStream(new MemoryStream(Encoding.UTF8.GetBytes(appsettings)))
+                        .AddJsonFile("appsettings.json")
                         .Build();
         }
     }
