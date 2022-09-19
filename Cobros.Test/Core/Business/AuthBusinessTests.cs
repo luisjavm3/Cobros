@@ -2,7 +2,9 @@
 using Cobros.API.Core.Model.DTO.Auth;
 using Cobros.API.Core.Model.Exceptions;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.Text;
 
 namespace Cobros.Test.Core.Business
 {
@@ -110,6 +112,28 @@ namespace Cobros.Test.Core.Business
                 .Should()
                 .ThrowAsync<AppException>()
                 .WithMessage("Wrong credentials.");
+        }
+
+        [Fact]
+        public async void Login_OnSuccess_RetunsATokenResponseObject()
+        {
+            // Arrange
+            var helper = new TestHelpers();
+            var unitOfWork = helper.GetUnitOfWork();
+            var mapper = helper.GetMapper();
+            var configuration = helper.GetConfiguration();
+
+            var authLoginDto = new AuthLoginDto { Username = "User3", Password = "123456" };
+
+            var sut = new AuthBusiness(unitOfWork, mapper, configuration);
+
+            // Act
+            var result = await sut.Login(authLoginDto);
+
+            // Assert
+            result
+                .Should()
+                .BeOfType<TokensResponse>();
         }
     }
 }
