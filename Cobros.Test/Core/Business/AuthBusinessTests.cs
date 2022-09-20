@@ -53,7 +53,7 @@ namespace Cobros.Test.Core.Business
             foundUser.Should().NotBeNull();
 
             // There are 7 test users in database. so a new one must have Id = 8
-            foundUser.Id.Should().Be(8);
+            foundUser.Name.Should().Be(toRegister.Name);
         }
 
         [Fact]
