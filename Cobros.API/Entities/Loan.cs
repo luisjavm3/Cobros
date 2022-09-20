@@ -8,6 +8,8 @@
 
         public int CobroId { get; set; }
         public Cobro Cobro { get; init; }
+
+        public int CustomerId { get; set; }
         public Customer Customer { get; init; }
         public IEnumerable<PartialPayment> PartialPayments { get; set; }
 
