@@ -1,6 +1,5 @@
 ﻿using Cobros.API.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 
 namespace Cobros.API.DataAccess
 {
@@ -9,7 +8,12 @@ namespace Cobros.API.DataAccess
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {}
 
+        public DbSet<Cobro> Cobros { get; set; }
+        public DbSet<Loan> Loans { get; set; }
+        public DbSet<PartialPayment> PartialPayments { get; set; }
+
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<PhoneNumber> PhoneNumbers { get; set; }
 
         // Person entities
         public DbSet<User> Users { get; set; }
