@@ -2,7 +2,7 @@
 {
     public class DebtCollector:Person
     {
-        public int CobroId { get; set; }
+        //public int CobroId { get; set; }
         public Cobro Cobro { get; set; }
     }
 }

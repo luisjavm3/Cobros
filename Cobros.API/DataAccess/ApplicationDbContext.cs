@@ -30,10 +30,10 @@ namespace Cobros.API.DataAccess
             modelBuilder
                 .Entity<Person>()
                 .ToTable("Persons")
-                .HasDiscriminator<int>("PersonType")
-                .HasValue<User>(1)
-                .HasValue<DebtCollector>(2)
-                .HasValue<Customer>(3);
+                .HasDiscriminator<string>("PersonType")
+                .HasValue<User>("user")
+                .HasValue<DebtCollector>("debt_collector")
+                .HasValue<Customer>("customer");
 
             modelBuilder
                 .Entity<Person>()
@@ -50,6 +50,12 @@ namespace Cobros.API.DataAccess
                 .HasIndex(x => new { x.CobroId, x.RoutePosition })
                 .IsUnique();
 
+            modelBuilder
+                .Entity<Loan>()
+                .HasOne(x=>x.Customer)
+                .WithMany(y=>y.Loans)
+                .OnDelete(DeleteBehavior.NoAction);
+            
             modelBuilder.SeedDB();
         }
     }

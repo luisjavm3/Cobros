@@ -7,10 +7,10 @@
         public int RoutePosition { get; set; }
 
         public int CobroId { get; set; }
-        public Cobro Cobro { get; init; }
+        public Cobro Cobro { get; set; }
 
-        public int CustomerId { get; set; }
-        public Customer Customer { get; init; }
+        public int? CustomerId { get; set; }
+        public Customer Customer { get; set; }
         public IEnumerable<PartialPayment> PartialPayments { get; set; }
 
         public double Total => Value * (1 + LoanInterest / (double)100);
