@@ -6,24 +6,24 @@ namespace Cobros.API.Repositories
 {
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ApplicationDbContext _context;
         private IDbContextTransaction _transaction;
         public IUserRepository Users { get; }
+        public ICobroRepository Cobros { get; }
         public IRefreshTokenRepository RefreshTokens { get; }
 
-        //public ApplicationDbContext Context { get { return _applicationDbContext; } }
-
-        public UnitOfWork(ApplicationDbContext applicationDbContext)
+        public UnitOfWork(ApplicationDbContext context)
         {
-            _applicationDbContext = applicationDbContext;
+            _context = context;
 
-            Users = new UserRepository(_applicationDbContext);
-            RefreshTokens = new RefreshTokenRepository(_applicationDbContext);
+            Users = new UserRepository(_context);
+            RefreshTokens = new RefreshTokenRepository(_context);
+            Cobros = new CobroRepository(_context);
         }
 
         public void BeginTransaccion()
         {
-            _transaction = _applicationDbContext.Database.BeginTransaction();
+            _transaction = _context.Database.BeginTransaction();
         }
 
         public void Commit()
@@ -33,7 +33,7 @@ namespace Cobros.API.Repositories
 
         public async Task CompleteAsync()
         {
-            await _applicationDbContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public void Rollback()
@@ -44,7 +44,7 @@ namespace Cobros.API.Repositories
 
         public void Dispose()
         {
-            _applicationDbContext.Dispose();
+            _context.Dispose();
             GC.SuppressFinalize(this);
         }
     }

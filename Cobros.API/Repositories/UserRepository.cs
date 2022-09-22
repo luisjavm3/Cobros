@@ -8,7 +8,7 @@ namespace Cobros.API.Repositories
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
-        public UserRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
+        public UserRepository(ApplicationDbContext context) : base(context)
         {}
 
         public async Task<User> GetByUsernameAsync(string username)
