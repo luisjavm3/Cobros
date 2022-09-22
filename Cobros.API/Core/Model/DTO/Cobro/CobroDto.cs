@@ -5,6 +5,7 @@
         public string Name { get; set; }
         public int UserId { get; set; }
         public int DebtCollectorId { get; set; }
+        public int Loans { get; set; }
         public int Balance { get; set; }
     }
 }

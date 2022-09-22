@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Cobros.API.Core.Business.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cobros.API.Controllers
 {
@@ -6,11 +7,18 @@ namespace Cobros.API.Controllers
     [Route("[controller]")]
     public class CobrosController : ControllerBase
     {
+        private readonly ICobroBusiness _cobroBusiness;
+
+        public CobrosController(ICobroBusiness cobroBusiness)
+        {
+            _cobroBusiness = cobroBusiness;
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            throw new NotImplementedException();
+            var result = await _cobroBusiness.GetCobroById(id);
+            return Ok(result);
         }
     }
 }

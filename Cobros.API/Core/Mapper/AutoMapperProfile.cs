@@ -14,7 +14,8 @@ namespace Cobros.API.Core.Mapper
             CreateMap<User, UserDto>();
 
             // Cobro
-            CreateMap<Cobro, CobroDto>();
+            CreateMap<Cobro, CobroDto>()
+                .ForMember(x => x.Loans, opt => opt.MapFrom(src => src.Loans.Count()));
         }
     }
 }
