@@ -19,17 +19,12 @@ namespace Cobros.API.Core.Business
 
         public async Task<CobroDto> GetCobroById(int id)
         {
-            var existing = await _unitOfWork.Cobros.GetByIdIncludingActivedLoansAsync(id);
+            var existing = await _unitOfWork.Cobros.GetByIdIncludingActiveLoansAsync(id);
 
             if (existing == null)
                 throw new NotFoundException($"Cobro with Id: {id} not found.");
 
-            //var balance = existing.Loans.Aggregate(0, (acc, x) => acc + x.Balance);
-
-            var result = _mapper.Map<CobroDto>(existing);
-            //result.Balance = balance;
-
-            return result;
+            return _mapper.Map<CobroDto>(existing);
         }
     }
 }

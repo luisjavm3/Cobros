@@ -12,7 +12,7 @@ namespace Cobros.API.Repositories
 
         }
 
-        public async Task<Cobro> GetByIdIncludingActivedLoansAsync(int id)
+        public async Task<Cobro> GetByIdIncludingActiveLoansAsync(int id)
         {
             return await _applicationDbContext.Cobros
                 .Include(c => c.Loans.Where(l => l.DeletedAt == null))

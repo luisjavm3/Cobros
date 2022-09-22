@@ -17,19 +17,15 @@ namespace Cobros.API.Middleware
         {
             try
             {
-                var userId = int.Parse(context.User.FindFirstValue(claimType: ClaimTypes.NameIdentifier));
+                var userId = int.Parse(context.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 var userDto = await userBusiness.GetById(userId);
 
                 context.Items["User"] = userDto;
-
-                Console.WriteLine($"---→ User: {JsonSerializer.Serialize(userDto)}");
             }
             catch (Exception)
             {
                 context.Items["User"] = null;
-                Console.WriteLine($"---→ User: null");
             }
-
 
             await _next(context);
         }
