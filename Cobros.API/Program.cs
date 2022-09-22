@@ -43,6 +43,7 @@ builder.Services.AddAuthentication(options =>
 // Add Business layer
 builder.Services.AddScoped<IAuthBusiness, AuthBusiness>();
 builder.Services.AddScoped<IUserBusiness, UserBusiness >();
+builder.Services.AddScoped<ICobroBusiness, CobroBusiness>();
 
 // Add UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
