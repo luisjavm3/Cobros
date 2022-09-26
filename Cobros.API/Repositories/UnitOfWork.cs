@@ -9,6 +9,7 @@ namespace Cobros.API.Repositories
         private readonly ApplicationDbContext _context;
         private IDbContextTransaction _transaction;
         public IUserRepository Users { get; }
+        public IDebtCollectorRepository DebtCollectors { get; set; }
         public ICobroRepository Cobros { get; }
         public IRefreshTokenRepository RefreshTokens { get; }
 
@@ -17,6 +18,7 @@ namespace Cobros.API.Repositories
             _context = context;
 
             Users = new UserRepository(_context);
+            DebtCollectors = new DebtCollectorRepository(_context);
             RefreshTokens = new RefreshTokenRepository(_context);
             Cobros = new CobroRepository(_context);
         }
