@@ -12,14 +12,22 @@ namespace Cobros.API.Repositories
 
         }
 
-        public async Task<IEnumerable<Cobro>> GetAllIncludingActiveLoansAsync()
+        public async Task<IEnumerable<Cobro>> GetAllByUserWithLoansAsync(int userId)
+        {
+            return await _applicationDbContext.Cobros
+                .Include(x => x.Loans.Where(y => y.DeletedAt == null))
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Cobro>> GetAllWithLoansAsync()
         {
             return await _applicationDbContext.Cobros
                 .Include(x=>x.Loans.Where(y=>y.DeletedAt ==  null))
                 .ToListAsync();
         }
 
-        public async Task<Cobro> GetByIdIncludingActiveLoansAsync(int id)
+        public async Task<Cobro> GetByIdWithLoansAsync(int id)
         {
             return await _applicationDbContext.Cobros
                 .Include(c => c.Loans.Where(l => l.DeletedAt == null))
