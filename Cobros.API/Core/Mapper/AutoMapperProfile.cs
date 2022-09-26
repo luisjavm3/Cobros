@@ -17,6 +17,8 @@ namespace Cobros.API.Core.Mapper
             CreateMap<Cobro, CobroDto>()
                 .ForMember(x => x.Loans, opt => opt.MapFrom(src => src.Loans.Count()))
                 .ForMember(x=>x.Balance, opt => opt.MapFrom(src => src.Loans.Aggregate(0, (acc, loan)=> acc + loan.Balance)));
+
+            CreateMap<CobroCreateDto, Cobro>();
         }
     }
 }

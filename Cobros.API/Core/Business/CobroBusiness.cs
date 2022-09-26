@@ -2,6 +2,7 @@
 using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.Core.Model.DTO.Cobro;
 using Cobros.API.Core.Model.Exceptions;
+using Cobros.API.Entities;
 using Cobros.API.Repositories.Interfaces;
 
 namespace Cobros.API.Core.Business
@@ -17,9 +18,35 @@ namespace Cobros.API.Core.Business
             _mapper = mapper;
         }
 
-        public Task CreateCobro(CobroCreateDto cobroCreateDto)
+        public async Task CreateCobro(CobroCreateDto cobroCreateDto)
         {
-            throw new NotImplementedException();
+            var existingCobro = await _unitOfWork.Cobros.GetByName(name: cobroCreateDto.Name);
+
+            if (existingCobro != null)
+                throw new AppException($"Name: {cobroCreateDto.Name} already exists.");
+
+            var toInsertCobro = _mapper.Map<Cobro>(cobroCreateDto);
+
+            if(cobroCreateDto.UserId != null)
+            {
+                var existingUser = await _unitOfWork.Users
+                                    .GetByIdAsync((int)cobroCreateDto.UserId);
+
+                if (existingUser == null)
+                    throw new NotFoundException($"User with Id: {cobroCreateDto.UserId} not found.");
+            }
+
+            if(cobroCreateDto.DebtCollectorId != null)
+            {
+                var existingDebtCollector = await _unitOfWork
+                                                .DebtCollectors.GetByIdAsync((int)cobroCreateDto.DebtCollectorId);
+
+                if (existingDebtCollector == null)
+                    throw new NotFoundException($"DebtCollector with Id: {cobroCreateDto.DebtCollectorId} not found.");
+            }
+
+            await _unitOfWork.Cobros.InsertAsync(toInsertCobro);
+            await _unitOfWork.CompleteAsync();
         }
 
         public async Task<CobroDto> GetCobroById(int id)

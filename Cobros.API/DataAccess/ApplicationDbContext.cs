@@ -23,6 +23,11 @@ namespace Cobros.API.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
+                .Entity<Cobro>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
+
+            modelBuilder
                 .Entity<RefreshToken>()
                 .HasIndex(x => x.Value)
                 .IsUnique();

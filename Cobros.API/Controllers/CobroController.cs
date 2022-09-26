@@ -33,8 +33,17 @@ namespace Cobros.API.Controllers
             return Ok();
         }
 
+        [Authorize(Role.ADMIN)]
         [HttpPost]
         public async Task<IActionResult> Create(CobroCreateDto cobroCreateDto)
+        {
+            await _cobroBusiness.CreateCobro(cobroCreateDto);
+            return Ok();
+        }
+
+        [Authorize(Role.ADMIN)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
             throw new NotImplementedException();
         }
