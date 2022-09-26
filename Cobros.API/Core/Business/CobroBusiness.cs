@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.Core.Model.DTO.Cobro;
+using Cobros.API.Core.Model.DTO.User;
 using Cobros.API.Core.Model.Exceptions;
 using Cobros.API.Entities;
 using Cobros.API.Repositories.Interfaces;
@@ -11,16 +12,26 @@ namespace Cobros.API.Core.Business
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CobroBusiness(IUnitOfWork unitOfWork, IMapper mapper)
+        public CobroBusiness(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+        private UserDto User => (UserDto)_httpContextAccessor.HttpContext.Items["User"];
 
         public async Task<IEnumerable<CobroDto>> GetAllCobros()
         {
-            var cobros = await _unitOfWork.Cobros.GetAllIncludingActiveLoansAsync();
+            IEnumerable<Cobro> cobros = null;
+
+            if (User.Role == Role.ADMIN)
+                cobros = await _unitOfWork.Cobros.GetAllWithLoansAsync();
+
+            if (User.Role == Role.USER)
+                cobros = await _unitOfWork.Cobros.GetAllByUserWithLoansAsync(userId: User.Id);
 
             return _mapper.Map<IEnumerable<CobroDto>>(cobros);
         }
@@ -69,7 +80,7 @@ namespace Cobros.API.Core.Business
 
         public async Task<CobroDto> GetCobroById(int id)
         {
-            var existing = await _unitOfWork.Cobros.GetByIdIncludingActiveLoansAsync(id);
+            var existing = await _unitOfWork.Cobros.GetByIdWithLoansAsync(id);
 
             if (existing == null)
                 throw new NotFoundException($"Cobro with Id: {id} not found.");
