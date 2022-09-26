@@ -18,9 +18,16 @@ namespace Cobros.API.Core.Business
             _mapper = mapper;
         }
 
+        public async Task<IEnumerable<CobroDto>> GetAllCobros()
+        {
+            var cobros = await _unitOfWork.Cobros.GetAllIncludingActiveLoansAsync();
+
+            return _mapper.Map<IEnumerable<CobroDto>>(cobros);
+        }
+
         public async Task CreateCobro(CobroCreateDto cobroCreateDto)
         {
-            var existingCobro = await _unitOfWork.Cobros.GetByName(name: cobroCreateDto.Name);
+            var existingCobro = await _unitOfWork.Cobros.GetByNameAsync(name: cobroCreateDto.Name);
 
             if (existingCobro != null)
                 throw new AppException($"Name: {cobroCreateDto.Name} already exists.");
@@ -46,6 +53,17 @@ namespace Cobros.API.Core.Business
             }
 
             await _unitOfWork.Cobros.InsertAsync(toInsertCobro);
+            await _unitOfWork.CompleteAsync();
+        }
+
+        public async Task DeleteCobro(int id)
+        {
+            var existingCobro = await _unitOfWork.Cobros.GetByIdAsync(id);
+
+            if (existingCobro == null)
+                throw new AppException($"Cobro with Id: {id} does not exist.");
+
+            await _unitOfWork.Cobros.DeleteAsync(existingCobro);
             await _unitOfWork.CompleteAsync();
         }
 

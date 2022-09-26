@@ -5,6 +5,7 @@ namespace Cobros.API.Repositories.Interfaces
     public interface ICobroRepository:IRepository<Cobro>
     {
         Task<Cobro> GetByIdIncludingActiveLoansAsync(int id);
-        Task<Cobro> GetByName(string name);
+        Task<IEnumerable<Cobro>> GetAllIncludingActiveLoansAsync();
+        Task<Cobro> GetByNameAsync(string name);
     }
 }

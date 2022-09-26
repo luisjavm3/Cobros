@@ -18,6 +18,13 @@ namespace Cobros.API.Controllers
             _cobroBusiness = cobroBusiness;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> All()
+        {
+            var cobros = await _cobroBusiness.GetAllCobros();
+            return Ok(cobros);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -45,7 +52,8 @@ namespace Cobros.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            throw new NotImplementedException();
+            await _cobroBusiness.DeleteCobro(id);
+            return Ok();
         }
     }
 }

@@ -7,5 +7,7 @@ namespace Cobros.API.Core.Business.Interfaces
         Task<CobroDto> GetCobroById(int id);
         Task UpdateCobro(int id, CobroUpdateDto cobroUpdateDto);
         Task CreateCobro(CobroCreateDto cobroCreateDto);
+        Task DeleteCobro(int id);
+        Task<IEnumerable<CobroDto>> GetAllCobros();
     }
 }

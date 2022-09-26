@@ -12,6 +12,13 @@ namespace Cobros.API.Repositories
 
         }
 
+        public async Task<IEnumerable<Cobro>> GetAllIncludingActiveLoansAsync()
+        {
+            return await _applicationDbContext.Cobros
+                .Include(x=>x.Loans.Where(y=>y.DeletedAt ==  null))
+                .ToListAsync();
+        }
+
         public async Task<Cobro> GetByIdIncludingActiveLoansAsync(int id)
         {
             return await _applicationDbContext.Cobros
@@ -19,7 +26,7 @@ namespace Cobros.API.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<Cobro> GetByName(string name)
+        public async Task<Cobro> GetByNameAsync(string name)
         {
             return await _applicationDbContext.Cobros
                 .FirstOrDefaultAsync(x => x.Name.ToLower().Equals(name.ToLower()));
