@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.Core.Model.DTO.Loan;
+using Cobros.API.Core.Model.Pagination;
 using Cobros.API.Entities;
 using Cobros.API.Repositories.Interfaces;
 
@@ -17,11 +18,14 @@ namespace Cobros.API.Core.Business
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<LoanDto>> GetAllByCobroId(int cobroId)
+        public async Task<PaginationResult<LoanDto>> GetAllByCobroId(int cobroId, PaginationParameters paginationParameters)
         {
-            var cobros = await _unitOfWork.Loans.GetAllByCobroIdAndSortedByRoutePositionASC(cobroId);
+            var loans = await _unitOfWork.Loans.GetAllByCobroIdAndSortedByRoutePositionASC(cobroId);
+            var source = _mapper.Map<IEnumerable<LoanDto>>(loans);
 
-            return _mapper.Map<IEnumerable<LoanDto>>(cobros);
+            var result = new PaginationResult<LoanDto>(source, paginationParameters);
+
+            return result;
         }
     }
 }

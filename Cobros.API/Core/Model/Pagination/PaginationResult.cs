@@ -13,14 +13,27 @@ namespace Cobros.API.Core.Model.Pagination
         public bool HasPrevious => PageNumber > 1;
         public bool HasNext => PageNumber < TotalPages;
 
-        public PaginationResult(IEnumerable<T> data, PaginationParameters paginationParameters, int count)
+        public PaginationResult(IEnumerable<T> source, PaginationParameters paginationParameters)
         {
-            Data = data;
-
             PageNumber = paginationParameters.PageNumber;
             PageSize = paginationParameters.PageSize;
-            TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-            TotalCount = count;
+            TotalCount = source.Count();
+            TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
+
+            int skip = (PageNumber - 1) * PageSize;
+            Data = source.Skip(skip).Take(PageSize);
+            //Data = source.Skip(skip).Take(PageSize).AsEnumerable();
         }
+
+        public PaginationResult(IEnumerable<T> data, PaginationParameters paginationParameters, int count)
+        {
+            PageNumber = paginationParameters.PageNumber;
+            PageSize = paginationParameters.PageSize;
+            TotalCount = count;
+            TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+
+            Data = data;
+        }
+
     }
 }
