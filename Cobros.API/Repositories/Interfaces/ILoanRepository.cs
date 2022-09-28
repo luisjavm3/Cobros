@@ -4,5 +4,6 @@ namespace Cobros.API.Repositories.Interfaces
 {
     public interface ILoanRepository : IRepository<Loan>
     {
+        Task<IEnumerable<Loan>> GetAllByCobroIdAndSortedByRoutePositionASC(int cobroId);
     }
 }
