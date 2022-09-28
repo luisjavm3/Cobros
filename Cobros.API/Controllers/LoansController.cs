@@ -7,7 +7,6 @@ namespace Cobros.API.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("Cobros/{cobroId}/[controller]")]
     public class LoansController:ControllerBase
     {
         private readonly ILoanBusiness _loanBusiness;
@@ -17,11 +16,24 @@ namespace Cobros.API.Controllers
             _loanBusiness = loanBusiness;
         }
 
-        [HttpGet]
+
+        /// <summary>
+        /// Paginated List-loans- sorted by RoutePosition.
+        /// </summary>
+        /// <param name="cobroId"></param>
+        /// <param name="paginationParameters">PageNumber and PageSize</param>
+        /// <returns>List-Loan- sorted by RoutePosition.</returns>
+        [HttpGet("Cobros/{cobroId}/Loans")]
         public async Task<IActionResult> GetAll(int cobroId, [FromQuery] PaginationParameters paginationParameters)
         {
             var result = await _loanBusiness.GetAllByCobroId(cobroId, paginationParameters);
             return Ok(result);
+        }
+
+        [HttpGet("Loans")]
+        public async Task<IActionResult> GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }

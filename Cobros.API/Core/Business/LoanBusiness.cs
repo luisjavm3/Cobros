@@ -3,6 +3,7 @@ using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.Core.Model.DTO.Loan;
 using Cobros.API.Core.Model.Pagination;
 using Cobros.API.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cobros.API.Core.Business
 {
