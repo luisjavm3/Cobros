@@ -1,5 +1,6 @@
 ﻿using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.Core.Model.Authorize;
+using Cobros.API.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cobros.API.Controllers
@@ -19,7 +20,8 @@ namespace Cobros.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(int cobroId)
         {
-            throw new NotImplementedException();
+            var result = await _loanBusiness.GetAllByCobroId(cobroId);
+            return Ok(result);
         }
     }
 }

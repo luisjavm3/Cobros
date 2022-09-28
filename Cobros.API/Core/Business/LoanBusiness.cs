@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Cobros.API.Core.Business.Interfaces;
+using Cobros.API.Core.Model.DTO.Loan;
 using Cobros.API.Entities;
 using Cobros.API.Repositories.Interfaces;
 
@@ -16,10 +17,11 @@ namespace Cobros.API.Core.Business
             _mapper = mapper;
         }
 
-        public Task<IEnumerable<Loan>> GetAllByCobroId(int cobroId)
+        public async Task<IEnumerable<LoanDto>> GetAllByCobroId(int cobroId)
         {
+            var cobros = await _unitOfWork.Loans.GetAllByCobroIdAndSortedByRoutePositionASC(cobroId);
 
-            throw new NotImplementedException();
+            return _mapper.Map<IEnumerable<LoanDto>>(cobros);
         }
     }
 }
