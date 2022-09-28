@@ -16,15 +16,5 @@ namespace Cobros.API.Repositories
             return await _applicationDbContext.Users
                     .FirstOrDefaultAsync(x => x.Username.ToLower().Equals(username.ToLower()));
         }
-
-        public async Task<IEnumerable<User>> GetRangeOfUser(PaginationParameters paginationParameters)
-        {
-            var skip = (paginationParameters.PageNumber - 1) * paginationParameters.PageSize;
-            return await _applicationDbContext.Users
-                        .OrderBy(x => x.Id)
-                        .Skip(skip)
-                        .Take(paginationParameters.PageSize)
-                        .ToListAsync();
-        }
     }
 }

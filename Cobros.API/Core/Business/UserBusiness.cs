@@ -28,10 +28,10 @@ namespace Cobros.API.Core.Business
             return _mapper.Map<UserDto>(existing);
         }
 
-        public async Task<PaginationResult<UserDto>> GetRangeOfUsers(PaginationParameters paginationParameters)
+        public async Task<PaginationResult<UserDto>> GetUsers(PaginationParameters paginationParameters)
         {
             var count = await _unitOfWork.Users.CountAsync();
-            var users = await _unitOfWork.Users.GetRangeOfUser(paginationParameters);
+            var users = await _unitOfWork.Users.GetPage(paginationParameters.PageNumber, paginationParameters.PageSize);
             var data = _mapper.Map<IEnumerable<UserDto>>(users);
 
             return new PaginationResult<UserDto>(data, paginationParameters, count);

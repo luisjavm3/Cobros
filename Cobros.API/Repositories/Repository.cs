@@ -57,5 +57,12 @@ namespace Cobros.API.Repositories
         {
             return await _dbSet.CountAsync();
         }
+
+        public async Task<IEnumerable<T>> GetPage(int page, int pageSize)
+        {
+            int skip = (page - 1) * pageSize;
+
+            return await  _dbSet.Skip(skip).Take(pageSize).ToListAsync();
+        }
     }
 }

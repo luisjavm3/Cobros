@@ -7,6 +7,6 @@ namespace Cobros.API.Core.Business.Interfaces
     public interface IUserBusiness
     {
         Task<UserDto> GetById(int id);
-        Task<PaginationResult<UserDto>> GetRangeOfUsers(PaginationParameters paginationParameters);
+        Task<PaginationResult<UserDto>> GetUsers(PaginationParameters paginationParameters);
     }
 }

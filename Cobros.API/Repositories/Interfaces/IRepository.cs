@@ -13,5 +13,7 @@ namespace Cobros.API.Repositories.Interfaces
         void Update(T entity);
         Task DeleteAsync(T entity);
         Task<int> CountAsync();
+
+        Task<IEnumerable<T>> GetPage(int page, int pageSize);
     }
 }

@@ -16,9 +16,9 @@ namespace Cobros.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetRangeOfUsers([FromQuery] PaginationParameters paginationParameters)
+        public async Task<IActionResult> GetUsers([FromQuery] PaginationParameters paginationParameters)
         {
-            var result = await _userBusiness.GetRangeOfUsers(paginationParameters);
+            var result = await _userBusiness.GetUsers(paginationParameters);
 
             return Ok(result);
         }
