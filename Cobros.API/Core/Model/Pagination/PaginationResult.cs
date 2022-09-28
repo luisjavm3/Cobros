@@ -1,6 +1,8 @@
-﻿namespace Cobros.API.Core.Model.Pagination
+﻿using Cobros.API.Entities;
+
+namespace Cobros.API.Core.Model.Pagination
 {
-    public class PaginationResult<T>
+    public class PaginationResult<T> where T : class
     {
         public IEnumerable<T> Data { get; private set; }
         public int PageNumber { get; private set; }
