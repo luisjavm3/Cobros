@@ -1,7 +1,6 @@
 ﻿using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.Core.Model.Authorize;
 using Cobros.API.Core.Model.Pagination;
-using Cobros.API.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cobros.API.Controllers

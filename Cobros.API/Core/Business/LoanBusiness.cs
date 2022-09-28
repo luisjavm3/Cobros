@@ -2,7 +2,6 @@
 using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.Core.Model.DTO.Loan;
 using Cobros.API.Core.Model.Pagination;
-using Cobros.API.Entities;
 using Cobros.API.Repositories.Interfaces;
 
 namespace Cobros.API.Core.Business
