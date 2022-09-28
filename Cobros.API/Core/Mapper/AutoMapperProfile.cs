@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cobros.API.Core.Model.DTO.Auth;
 using Cobros.API.Core.Model.DTO.Cobro;
+using Cobros.API.Core.Model.DTO.Loan;
 using Cobros.API.Core.Model.DTO.User;
 using Cobros.API.Entities;
 
@@ -19,6 +20,11 @@ namespace Cobros.API.Core.Mapper
                 .ForMember(x=>x.Balance, opt => opt.MapFrom(src => src.Loans.Aggregate(0, (acc, loan)=> acc + loan.Balance)));
 
             CreateMap<CobroCreateDto, Cobro>();
+
+            // Loan
+            CreateMap<Loan, LoanDto>()
+                .ForMember(x => x.Total, opt => opt.MapFrom(src => src.Value + (src.Value * src.LoanInterest/ 100)))
+                .ForMember(y => y.TotalPaid, opt => opt.MapFrom(src => src.PartialPayments.Aggregate(0, (acc, pp) => acc + pp.Value)));
         }
     }
 }
