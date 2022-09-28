@@ -1,5 +1,5 @@
 ﻿using Cobros.API.Core.Business.Interfaces;
-using Cobros.API.Core.Model;
+using Cobros.API.Core.Model.Pagination;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cobros.API.Controllers

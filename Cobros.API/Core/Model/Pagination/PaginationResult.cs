@@ -1,4 +1,4 @@
-﻿namespace Cobros.API.Core.Model
+﻿namespace Cobros.API.Core.Model.Pagination
 {
     public class PaginationResult<T>
     {
@@ -17,7 +17,7 @@
 
             PageNumber = paginationParameters.PageNumber;
             PageSize = paginationParameters.PageSize;
-            TotalPages = (int) Math.Ceiling(count / (double)PageSize);
+            TotalPages = (int)Math.Ceiling(count / (double)PageSize);
             TotalCount = count;
         }
     }

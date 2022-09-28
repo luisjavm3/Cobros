@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Cobros.API.Core.Business.Interfaces;
-using Cobros.API.Core.Model;
 using Cobros.API.Core.Model.DTO.User;
 using Cobros.API.Core.Model.Exceptions;
+using Cobros.API.Core.Model.Pagination;
 using Cobros.API.Repositories.Interfaces;
 
 namespace Cobros.API.Core.Business

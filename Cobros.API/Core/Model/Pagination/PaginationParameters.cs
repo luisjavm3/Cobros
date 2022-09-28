@@ -1,4 +1,4 @@
-﻿namespace Cobros.API.Core.Model
+﻿namespace Cobros.API.Core.Model.Pagination
 {
     public class PaginationParameters
     {

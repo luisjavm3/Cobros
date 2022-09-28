@@ -1,4 +1,4 @@
-﻿using Cobros.API.Core.Model;
+﻿using Cobros.API.Core.Model.Pagination;
 using Cobros.API.DataAccess;
 using Cobros.API.Entities;
 using Cobros.API.Repositories.Interfaces;
