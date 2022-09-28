@@ -85,6 +85,9 @@ namespace Cobros.API.Core.Business
             if (existing == null)
                 throw new NotFoundException($"Cobro with Id: {id} not found.");
 
+            if (existing.UserId != User.Id && User.Role == Role.USER)
+                throw new AccessForbiddenException($"Cobro with Id: {id} is not in your list of cobros.");
+
             return _mapper.Map<CobroDto>(existing);
         }
 
