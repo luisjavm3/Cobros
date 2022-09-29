@@ -21,7 +21,7 @@ namespace Cobros.API.Core.Model.Authorize
             if (allowAnonymous)
                 return;
 
-            UserDto user = (UserDto)context.HttpContext.Items["User"];
+            UserAuthenticatedDto user = (UserAuthenticatedDto)context.HttpContext.Items["User"];
 
             if(user == null || (_roles.Any() && !_roles.Contains(user.Role)))
             {

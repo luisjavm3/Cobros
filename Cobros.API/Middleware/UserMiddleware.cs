@@ -18,9 +18,10 @@ namespace Cobros.API.Middleware
             try
             {
                 var userId = int.Parse(context.User.FindFirstValue(ClaimTypes.NameIdentifier));
-                var userDto = await userBusiness.GetById(userId);
+                var userAuthenticatedDto = await userBusiness.GetByIdWithCobros(userId);
 
-                context.Items["User"] = userDto;
+                context.Items["User"] = userAuthenticatedDto;
+                Console.WriteLine($"---→ User: {JsonSerializer.Serialize(userAuthenticatedDto)}");
             }
             catch (Exception)
             {

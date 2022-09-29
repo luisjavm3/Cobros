@@ -18,14 +18,14 @@ namespace Cobros.API.Core.Business
             _mapper = mapper;
         }
 
-        public async Task<UserDto> GetById(int id)
+        public async Task<UserAuthenticatedDto> GetByIdWithCobros(int id)
         {
-            var existing = await _unitOfWork.Users.GetByIdAsync(id);
+            var existing = await _unitOfWork.Users.GetByIdWithCobros(id);
 
             if (existing == null)
                 throw new NotFoundException($"User with Id: {id} not found.");
 
-            return _mapper.Map<UserDto>(existing);
+            return _mapper.Map<UserAuthenticatedDto>(existing);
         }
 
         public async Task<PaginationResult<UserDto>> GetUsers(PaginationParameters paginationParameters)

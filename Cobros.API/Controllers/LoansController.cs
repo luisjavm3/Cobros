@@ -30,8 +30,8 @@ namespace Cobros.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Loans")]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("Loans/{id}")]
+        public async Task<IActionResult> GetById(int id)
         {
             throw new NotImplementedException();
         }

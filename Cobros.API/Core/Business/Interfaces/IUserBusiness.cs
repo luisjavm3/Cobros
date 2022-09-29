@@ -6,7 +6,7 @@ namespace Cobros.API.Core.Business.Interfaces
 {
     public interface IUserBusiness
     {
-        Task<UserDto> GetById(int id);
+        Task<UserAuthenticatedDto> GetByIdWithCobros(int id);
         Task<PaginationResult<UserDto>> GetUsers(PaginationParameters paginationParameters);
     }
 }

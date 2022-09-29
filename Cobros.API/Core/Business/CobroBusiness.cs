@@ -21,7 +21,7 @@ namespace Cobros.API.Core.Business
             _httpContextAccessor = httpContextAccessor;
         }
 
-        private UserDto User => (UserDto)_httpContextAccessor.HttpContext.Items["User"];
+        private UserAuthenticatedDto User => (UserAuthenticatedDto)_httpContextAccessor.HttpContext.Items["User"];
 
         public async Task<IEnumerable<CobroDto>> GetAllCobros()
         {
