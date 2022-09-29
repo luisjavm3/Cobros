@@ -14,7 +14,7 @@ namespace Cobros.API.Core.Mapper
             CreateMap<AuthRegisterDto, User>();
             CreateMap<User, UserDto>();
             CreateMap<User, UserAuthenticatedDto>()
-                .ForMember(x => x.Cobros, opt => opt.MapFrom(src => src.Cobros));
+                .ForMember(x => x.CobroIds, opt => opt.MapFrom(src => src.Cobros.Select(c=>c.Id)));
                 //.ForMember(x => x.Cobros, opt => opt.Ignore());
 
             // Cobro
