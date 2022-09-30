@@ -50,10 +50,10 @@ namespace Cobros.API.DataAccess
                 .HasIndex(x => x.Username)
                 .IsUnique();
 
-            modelBuilder
-                .Entity<Loan>()
-                .HasIndex(x => new { x.CobroId, x.RoutePosition })
-                .IsUnique();
+            //modelBuilder
+            //    .Entity<Loan>()
+            //    .HasIndex(x => new { x.CobroId, x.RoutePosition })
+            //    .IsUnique();
 
             modelBuilder
                 .Entity<Loan>()

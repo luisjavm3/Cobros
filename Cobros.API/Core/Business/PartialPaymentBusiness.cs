@@ -25,7 +25,7 @@ namespace Cobros.API.Core.Business
         {
             var existingLoan = await _unitOfWork.Loans.GetByIdAsync(loanId);
 
-            if (existingLoan == null)
+            if (existingLoan == null || existingLoan.DeletedAt != null)
                 throw new ApplicationException($"Loan with Id: {loanId} does not exists.");
 
             // Restrict user if it is not an admin and does not access to specific Loan.
@@ -42,12 +42,26 @@ namespace Cobros.API.Core.Business
                 {
                     _unitOfWork.BeginTransaccion();
 
-                    existingLoan.Balance = 0;
+                    int position = existingLoan.RoutePosition;
+
                     // Soft Delete Loan ↓
                     existingLoan.DeletedAt = DateTime.UtcNow;
-                    existingLoan.RoutePosition = -1;
+                    existingLoan.Balance = 0;
+                    existingLoan.RoutePosition = 0;
                     _unitOfWork.Loans.Update(existingLoan);
                     await _unitOfWork.CompleteAsync();
+
+                    // Sort Route in Cobro when paid off Loan
+                    var sortedLoans = await _unitOfWork.Loans.GetAllByCobroIdAndSortedByRoutePositionASC(existingLoan.CobroId);
+
+                    for (int i = position; i <= sortedLoans.Count(); i++)
+                    {
+                        var loan = sortedLoans.FirstOrDefault(l=>l.RoutePosition == i + 1);
+                        loan.RoutePosition = i;
+                        _unitOfWork.Loans.Update(loan);
+                        await _unitOfWork.CompleteAsync();
+                    }
+                    // --  Sorting finish.
 
                     var toInsert = new PartialPayment
                     {
