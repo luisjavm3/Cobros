@@ -1,5 +1,6 @@
 ﻿using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.Core.Model.Authorize;
+using Cobros.API.Core.Model.DTO.Loan;
 using Cobros.API.Core.Model.Pagination;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +29,13 @@ namespace Cobros.API.Controllers
         {
             var result = await _loanBusiness.GetAllByCobroId(cobroId, paginationParameters);
             return Ok(result);
+        }
+
+        [HttpPost("Cobros/{cobroId}/Loans")]
+        public async Task<IActionResult> Insert(int cobroId, LoanCreateDto loanCreateDto)
+        {
+            await _loanBusiness.InsertLoan(cobroId, loanCreateDto);
+            return Ok();
         }
 
         [HttpGet("Loans/{id}")]

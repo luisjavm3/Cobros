@@ -4,6 +4,7 @@ using Cobros.API.Core.Model.DTO.Loan;
 using Cobros.API.Core.Model.DTO.User;
 using Cobros.API.Core.Model.Exceptions;
 using Cobros.API.Core.Model.Pagination;
+using Cobros.API.Entities;
 using Cobros.API.Repositories.Interfaces;
 
 namespace Cobros.API.Core.Business
@@ -40,11 +41,39 @@ namespace Cobros.API.Core.Business
             if (existing == null)
                 throw new NotFoundException($"Loan with Id: {id} not found.");
 
-            //if (existing.)
+            // Restrict access if loan is not in allowed Cobro.
+            if (User.Role == Role.USER)
+                if (!User.CobroIds.Contains(existing.CobroId))
+                    throw new AccessForbiddenException("Action forbidden.");
 
-            //    return _mapper.Map<LoanDto>(existing);
+            return _mapper.Map<LoanDto>(existing);
+        }
 
-            throw new NotImplementedException();
+        public async Task InsertLoan(int cobroId, LoanCreateDto loanCreateDto)
+        {
+            var existingCobro = await _unitOfWork.Cobros.GetByIdAsync(cobroId);
+
+            if (existingCobro == null)
+                throw new AppException($"Cobro with Id: {cobroId} not found.");
+
+            // Restrict user
+            if (User.Role == Role.USER)
+                if (!User.CobroIds.Contains(cobroId))
+                    throw new AccessForbiddenException("Access Forbidden");
+
+            // Check Customer existence.
+            var existingCustomer = await _unitOfWork.Customers.GetByIdAsync(loanCreateDto.CustomerId);
+
+            if (existingCustomer == null)
+                throw new AppException($"Customer with Id: {loanCreateDto.CustomerId} does not exist.");
+
+            var toInsert = _mapper.Map<Loan>(loanCreateDto);
+            toInsert.CobroId = cobroId;
+
+            // More logic here
+
+            await _unitOfWork.Loans.InsertAsync(toInsert);
+            await _unitOfWork.CompleteAsync();
         }
     }
 }

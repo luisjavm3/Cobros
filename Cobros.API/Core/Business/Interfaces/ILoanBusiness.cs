@@ -7,5 +7,6 @@ namespace Cobros.API.Core.Business.Interfaces
     {
         Task<PaginationResult<LoanDto>> GetAllByCobroId(int cobroId, PaginationParameters paginationParameters);
         Task<LoanDto> GetById(int id);
+        Task InsertLoan(int cobroId, LoanCreateDto loanCreateDto);
     }
 }

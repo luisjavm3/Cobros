@@ -27,6 +27,8 @@ namespace Cobros.API.Core.Mapper
             CreateMap<Loan, LoanDto>()
                 .ForMember(x => x.Total, opt => opt.MapFrom(src => src.Value + (src.Value * src.LoanInterest/ 100)))
                 .ForMember(y => y.TotalPaid, opt => opt.MapFrom(src => src.PartialPayments.Aggregate(0, (acc, pp) => acc + pp.Value)));
+            CreateMap<LoanCreateDto, Loan>()
+                .ForMember(x=>x.Balance, opt => opt.MapFrom(src => src.Value + (src.Value * src.LoanInterest / 100)));
         }
     }
 }
