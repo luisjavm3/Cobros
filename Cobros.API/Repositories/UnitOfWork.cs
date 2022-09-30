@@ -14,6 +14,8 @@ namespace Cobros.API.Repositories
         public IRefreshTokenRepository RefreshTokens { get; }
         public ILoanRepository Loans { get; }
 
+        public ICustomerRepository Customers { get; }
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -23,6 +25,7 @@ namespace Cobros.API.Repositories
             RefreshTokens = new RefreshTokenRepository(_context);
             Cobros = new CobroRepository(_context);
             Loans = new LoanRepository(_context);
+            Customers = new CustomerRepository(_context);
         }
 
         public void BeginTransaccion()

@@ -9,6 +9,7 @@ namespace Cobros.API.Repositories.Interfaces
         ICobroRepository Cobros { get; }
         IRefreshTokenRepository RefreshTokens { get; }
         ILoanRepository Loans { get; }
+        ICustomerRepository Customers { get; }
 
         void BeginTransaccion();
         void Commit();
