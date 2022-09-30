@@ -13,8 +13,8 @@ namespace Cobros.API.Repositories
         public ICobroRepository Cobros { get; }
         public IRefreshTokenRepository RefreshTokens { get; }
         public ILoanRepository Loans { get; }
-
         public ICustomerRepository Customers { get; }
+        public IPartialPaymentRepository PartialPayments { get; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -26,6 +26,7 @@ namespace Cobros.API.Repositories
             Cobros = new CobroRepository(_context);
             Loans = new LoanRepository(_context);
             Customers = new CustomerRepository(_context);
+            PartialPayments = new PartialPaymentRepository(_context);
         }
 
         public void BeginTransaccion()
