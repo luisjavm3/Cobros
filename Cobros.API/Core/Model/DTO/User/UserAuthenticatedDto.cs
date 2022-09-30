@@ -1,6 +1,4 @@
-﻿
-using Cobros.API.Core.Model.DTO.Cobro;
-using Cobros.API.Entities;
+﻿using Cobros.API.Entities;
 
 namespace Cobros.API.Core.Model.DTO.User
 {
