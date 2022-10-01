@@ -34,9 +34,9 @@ namespace Cobros.API.Core.Business
             return result;
         }
 
-        public async Task<LoanDto> GetById(int id)
+        public async Task<LoanDetailsDto> GetByIdWithDetails(int id)
         {
-            var existing = await _unitOfWork.Loans.GetByIdAsync(id);
+            var existing = await _unitOfWork.Loans.GetDetails(id);
 
             if (existing == null)
                 throw new NotFoundException($"Loan with Id: {id} not found.");
@@ -46,7 +46,7 @@ namespace Cobros.API.Core.Business
                 if (!User.CobroIds.Contains(existing.CobroId))
                     throw new AccessForbiddenException("Action forbidden.");
 
-            return _mapper.Map<LoanDto>(existing);
+            return _mapper.Map<LoanDetailsDto>(existing);
         }
 
         public async Task InsertLoan(int cobroId, LoanCreateDto loanCreateDto)

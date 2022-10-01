@@ -29,6 +29,17 @@ namespace Cobros.API.Core.Mapper
                 .ForMember(y => y.TotalPaid, opt => opt.MapFrom(src => src.PartialPayments.Aggregate(0, (acc, pp) => acc + pp.Value)));
             CreateMap<LoanCreateDto, Loan>()
                 .ForMember(x=>x.Balance, opt => opt.MapFrom(src => src.Value + (src.Value * src.LoanInterest / 100)));
+
+            //CreateMap<Loan, LoanDetailsDto>()
+            //    .ForMember(y => y.TotalPaid, opt => opt.MapFrom(src => src.PartialPayments.Aggregate(0, (acc, pp) => acc + pp.Value)))
+            //    .ForMember(x => x.Customer, opt => opt.MapFrom(s => new { s.Customer.Id, s.Customer.Name, s.Customer.NationalID }))
+            //    .ForMember(x => x.PartialPayments, o => o.MapFrom(s => s.PartialPayments.Select(pp => new { pp.Value, pp.CreatedAt })));
+
+            CreateMap<Loan, LoanDetailsDto>()
+                .ForMember(y => y.TotalPaid, opt => opt.MapFrom(src => src.PartialPayments.Aggregate(0, (acc, pp) => acc + pp.Value)))
+                //.ForMember(x => x.Customer, o => o.Ignore())
+                .ForMember(x => x.PartialPayments, o => o.Ignore())
+                .BeforeMap((src, des) => src.Customer.Loans = null);
         }
     }
 }
