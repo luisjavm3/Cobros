@@ -18,5 +18,13 @@ namespace Cobros.API.Repositories
                 .OrderBy(x => x.RoutePosition)
                 .ToListAsync();
         }
+
+        public async Task<Loan> GetDetails(int id)
+        {
+            return await _applicationDbContext.Loans
+                .Include(l => l.Customer)
+                .Include(l => l.PartialPayments)
+                .FirstOrDefaultAsync(l => l.Id == id);
+        }
     }
 }

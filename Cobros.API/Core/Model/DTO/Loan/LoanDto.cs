@@ -5,6 +5,7 @@ namespace Cobros.API.Core.Model.DTO.Loan
     public class LoanDto
     {
         public int Id { get; set; }
+        public DateTime CreatedAt { get; set; }
         public int CobroId { get; set; }
         public int CustomerId { get; set; }
         public int Value { get; set; }
@@ -13,6 +14,5 @@ namespace Cobros.API.Core.Model.DTO.Loan
         public int Balance { get; set; }
         public double Total { get; set; }
         public int TotalPaid { get; set; }
-
     }
 }

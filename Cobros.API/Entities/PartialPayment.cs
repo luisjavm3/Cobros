@@ -5,6 +5,6 @@
         public int Value { get; set; }
 
         public int LoanId { get; set; }
-        public Loan Loan { get; set; }
+        public virtual Loan Loan { get; set; }
     }
 }
