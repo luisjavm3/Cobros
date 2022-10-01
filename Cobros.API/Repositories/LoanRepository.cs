@@ -24,6 +24,7 @@ namespace Cobros.API.Repositories
             return await _applicationDbContext.Loans
                 .Include(l => l.Customer)
                 .Include(l => l.PartialPayments)
+                .Include(l => l.Cobro)
                 .FirstOrDefaultAsync(l => l.Id == id);
         }
     }
