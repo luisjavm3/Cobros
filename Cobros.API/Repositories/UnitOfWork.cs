@@ -15,6 +15,7 @@ namespace Cobros.API.Repositories
         public ILoanRepository Loans { get; }
         public ICustomerRepository Customers { get; }
         public IPartialPaymentRepository PartialPayments { get; }
+        public IPersonRepository People { get; set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -27,6 +28,7 @@ namespace Cobros.API.Repositories
             Loans = new LoanRepository(_context);
             Customers = new CustomerRepository(_context);
             PartialPayments = new PartialPaymentRepository(_context);
+            People = new PersonRepository(_context);
         }
 
         public void BeginTransaccion()

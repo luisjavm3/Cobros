@@ -18,5 +18,11 @@ namespace Cobros.API.Repositories
                 .Include(c => c.Loans.Where(l => l.DeletedAt == null))
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
+
+        public async Task<Customer> GetByNationalID(string nationalID)
+        {
+            return await _applicationDbContext.Customers
+                .FirstOrDefaultAsync(c=>c.NationalID.Equals(nationalID));
+        }
     }
 }

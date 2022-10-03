@@ -11,6 +11,7 @@ namespace Cobros.API.Repositories.Interfaces
         ILoanRepository Loans { get; }
         ICustomerRepository Customers { get; }
         IPartialPaymentRepository PartialPayments { get; }
+        IPersonRepository People { get; }
 
         void BeginTransaccion();
         void Commit();
