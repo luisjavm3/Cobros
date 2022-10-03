@@ -17,7 +17,6 @@ namespace Cobros.API.Controllers
             _loanBusiness = loanBusiness;
         }
 
-
         /// <summary>
         /// Paginated List-loans- sorted by RoutePosition.
         /// </summary>
@@ -31,6 +30,12 @@ namespace Cobros.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Insert Loan in specific Cobro
+        /// </summary>
+        /// <param name="cobroId"></param>
+        /// <param name="loanCreateDto"></param>
+        /// <returns></returns>
         [HttpPost("Cobros/{cobroId}/Loans")]
         public async Task<IActionResult> Insert(int cobroId, LoanCreateDto loanCreateDto)
         {
@@ -38,6 +43,11 @@ namespace Cobros.API.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Retrieve a loan details od Cobro, PartialPayments and Customer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Loan</returns>
         [HttpGet("Loans/{id}/details")]
         public async Task<IActionResult> GetById(int id)
         {

@@ -16,6 +16,7 @@ namespace Cobros.API.DataAccess
         public DbSet<PhoneNumber> PhoneNumbers { get; set; }
 
         // Person entities
+        public DbSet<Person> Persons { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<DebtCollector> DebtCollectors { get; set; }
         public DbSet<Customer> Customers { get; set; }

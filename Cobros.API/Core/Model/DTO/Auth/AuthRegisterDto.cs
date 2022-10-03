@@ -8,6 +8,14 @@ namespace Cobros.API.Core.Model.DTO.Auth
         [Required]
         [MaxLength(255)]
         public string Username { get; set; }
+        
+        [Required]
+        [MinLength(7)]
+        public string NationalID { get; set; }
+
+        [Required]
+        [MinLength(7)]
+        public string Address { get; set; }
 
         [Required]
         [MaxLength(255)]

@@ -52,6 +52,8 @@ builder.Services.AddScoped<IUserBusiness, UserBusiness >();
 builder.Services.AddScoped<ICobroBusiness, CobroBusiness>();
 builder.Services.AddScoped<ILoanBusiness, LoanBusiness>();
 builder.Services.AddScoped<IPartialPaymentBusiness, PartialPaymentBusiness>();
+builder.Services.AddScoped<ICustomerBusiness, CustomerBusiness>();
+builder.Services.AddScoped<IDebtCollectorBusiness, DebtCollectorBusiness>();
 
 // Add UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

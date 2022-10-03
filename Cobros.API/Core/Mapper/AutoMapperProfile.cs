@@ -45,6 +45,7 @@ namespace Cobros.API.Core.Mapper
 
             // Customer
             CreateMap<Customer, CustomerDto>();
+            CreateMap<CustomerCreateDto, Customer>();
         }
     }
 }
