@@ -1,5 +1,7 @@
 ﻿using Cobros.API.Core.Business.Interfaces;
+using Cobros.API.Core.Model.Authorize;
 using Cobros.API.Core.Model.DTO.Auth;
+using Cobros.API.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cobros.API.Controllers
@@ -15,6 +17,7 @@ namespace Cobros.API.Controllers
             _authBusiness = authBusiness;
         }
 
+        [Authorize(roles: Role.ADMIN)]
         [HttpPost("Register")]
         public async Task<IActionResult> Register(AuthRegisterDto authRegisterDto)
         {
