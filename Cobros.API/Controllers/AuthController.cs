@@ -1,6 +1,7 @@
 ﻿using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.Core.Model.Authorize;
 using Cobros.API.Core.Model.DTO.Auth;
+using Cobros.API.Core.Model.DTO.User;
 using Cobros.API.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,6 +61,14 @@ namespace Cobros.API.Controllers
 
             Response.Cookies.Delete("refresh_token");
 
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPut("ChangePassword/{userId}")]
+        public async Task<IActionResult> ChangePassword(int userId, ChangePasswordDto changePasswordDto)
+        {
+            await _authBusiness.ChangePassword(userId, changePasswordDto);
             return Ok();
         }
 

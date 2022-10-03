@@ -2,6 +2,7 @@
 using Cobros.API.Core.Model.DTO.Auth;
 using Cobros.API.Core.Model.DTO.Cobro;
 using Cobros.API.Core.Model.DTO.Customer;
+using Cobros.API.Core.Model.DTO.DebtCollector;
 using Cobros.API.Core.Model.DTO.Loan;
 using Cobros.API.Core.Model.DTO.PartialPayment;
 using Cobros.API.Core.Model.DTO.User;
@@ -18,6 +19,13 @@ namespace Cobros.API.Core.Mapper
             CreateMap<User, UserDto>();
             CreateMap<User, UserAuthenticatedDto>()
                 .ForMember(x => x.CobroIds, opt => opt.MapFrom(src => src.Cobros.Select(c=>c.Id)));
+
+            // Customer
+            CreateMap<Customer, CustomerDto>();
+            CreateMap<CustomerCreateDto, Customer>();
+
+            // DebtCollector
+            CreateMap<DebtCollectorCreateDto, DebtCollector>();
 
             // Cobro
             CreateMap<Cobro, CobroDto>()
@@ -43,9 +51,6 @@ namespace Cobros.API.Core.Mapper
             // PartialPayment
             CreateMap<PartialPayment, PartialPaymentDto>();
 
-            // Customer
-            CreateMap<Customer, CustomerDto>();
-            CreateMap<CustomerCreateDto, Customer>();
         }
     }
 }

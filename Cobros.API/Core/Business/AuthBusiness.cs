@@ -2,6 +2,7 @@
 using Cobros.API.Core.Business.Interfaces;
 using Cobros.API.Core.Helper;
 using Cobros.API.Core.Model.DTO.Auth;
+using Cobros.API.Core.Model.DTO.User;
 using Cobros.API.Core.Model.Exceptions;
 using Cobros.API.Entities;
 using Cobros.API.Repositories.Interfaces;
@@ -187,5 +188,24 @@ namespace Cobros.API.Core.Business
             return tokenHandler.WriteToken(token);
         }
 
+        public async Task ChangePassword(int userId, ChangePasswordDto changePasswordDto)
+        {
+            var existingUser = await _unitOfWork.Users.GetByIdAsync(userId);
+
+            if(existingUser == null)
+                throw new AppException($"Wrong Credentials.");
+
+            bool match = BCrypt.Net.BCrypt.Verify(changePasswordDto.CurrentPassword, existingUser.PasswordHash);
+
+            if (!match)
+                throw new AppException("Wrong Credentials.");
+
+            var newHash = BCrypt.Net.BCrypt.HashPassword(changePasswordDto.NewPassword);
+
+            existingUser.PasswordHash = newHash;
+
+            _unitOfWork.Users.Update(existingUser);
+            await _unitOfWork.CompleteAsync();
+        }
     }
 }

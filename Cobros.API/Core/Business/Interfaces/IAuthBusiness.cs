@@ -1,4 +1,5 @@
 ﻿using Cobros.API.Core.Model.DTO.Auth;
+using Cobros.API.Core.Model.DTO.User;
 
 namespace Cobros.API.Core.Business.Interfaces
 {
@@ -8,5 +9,6 @@ namespace Cobros.API.Core.Business.Interfaces
         Task<TokensResponse> Login(AuthLoginDto authLoginDto);
         Task<TokensResponse> RefreshToken(string refreshToken);
         Task RevokeRefreshToken(string refreshToken);
+        Task ChangePassword(int userId, ChangePasswordDto changePasswordDto);
     }
 }
