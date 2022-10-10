@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cobros.API", "Cobros.API\Cobros.API.csproj", "{D71AF62F-F34F-4346-B615-798DBFAB9260}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cobros.API", "Cobros.API\Cobros.API.csproj", "{D71AF62F-F34F-4346-B615-798DBFAB9260}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cobros.Test", "Cobros.Test\Cobros.Test.csproj", "{3440E23C-41E7-49F5-82C6-B6D2B4EFF709}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cobros.Test", "Cobros.Test\Cobros.Test.csproj", "{3440E23C-41E7-49F5-82C6-B6D2B4EFF709}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
