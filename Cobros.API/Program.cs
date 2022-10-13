@@ -41,6 +41,7 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true,
         ValidateIssuer = false,
         ValidateAudience = false,
+        ClockSkew=TimeSpan.Zero,
     };
 });
 
