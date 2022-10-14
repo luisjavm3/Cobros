@@ -35,6 +35,11 @@ namespace Cobros.API.Controllers
             return Ok(tokens.AccessToken);
         }
 
+
+        /// <summary>
+        /// Returns an Refresh Token on headers and an access token on responses body.
+        /// </summary>
+        /// <returns>A Refresh Token settep on headers and a access token returned on response body.</returns>
         [HttpPost("Refresh-token")]
         public async Task<IActionResult> RefreshToken()
         {
@@ -78,9 +83,23 @@ namespace Cobros.API.Controllers
             {
                 HttpOnly = true,
                 Expires = DateTimeOffset.UtcNow.AddDays(1),
+                IsEssential = true,
             };
 
             Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
+            CookieDePrueba();
+        }
+
+        private void CookieDePrueba()
+        {
+            var cookieOptions = new CookieOptions
+            {
+                //HttpOnly = true,
+                //Expires = DateTimeOffset.UtcNow.AddDays(1),
+                IsEssential = true,
+            };
+
+            Response.Cookies.Append("cookie_prueba", "valor_cookie_prueba", cookieOptions);
         }
     }
 }
