@@ -35,6 +35,8 @@ namespace Cobros.API.Repositories
         {
             return await _applicationDbContext.Cobros
                 .Include(c => c.Loans.Where(l => l.DeletedAt == null))
+                .Include(c => c.User)
+                .Include(c=>c.DebtCollector)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
