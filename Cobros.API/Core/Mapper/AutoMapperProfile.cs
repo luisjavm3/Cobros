@@ -15,6 +15,7 @@ namespace Cobros.API.Core.Mapper
         public AutoMapperProfile()
         {
             // User
+            CreateMap<User, UserSimpleDto>();
             CreateMap<AuthRegisterDto, User>();
             CreateMap<User, UserDto>();
             CreateMap<User, UserAuthenticatedDto>()
@@ -25,6 +26,7 @@ namespace Cobros.API.Core.Mapper
             CreateMap<CustomerCreateDto, Customer>();
 
             // DebtCollector
+            CreateMap<DebtCollector, DebtCollectorSimpleDto>();
             CreateMap<DebtCollectorCreateDto, DebtCollector>();
 
             // Cobro
