@@ -14,6 +14,7 @@ namespace Cobros.API.Repositories
         {
             return await _applicationDbContext.Loans
                 .Include(x => x.PartialPayments)
+                .Include(x=>x.Customer)
                 .Where(x => x.CobroId == cobroId && x.DeletedAt == null)
                 .OrderBy(x => x.RoutePosition)
                 .ToListAsync();

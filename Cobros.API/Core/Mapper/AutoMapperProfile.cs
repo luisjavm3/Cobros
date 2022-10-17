@@ -24,6 +24,7 @@ namespace Cobros.API.Core.Mapper
             // Customer
             CreateMap<Customer, CustomerDto>();
             CreateMap<CustomerCreateDto, Customer>();
+            CreateMap<Customer, CustomerSimpleDto>();
 
             // DebtCollector
             CreateMap<DebtCollector, DebtCollectorSimpleDto>();

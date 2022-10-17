@@ -1,4 +1,5 @@
-﻿using Cobros.API.Entities;
+﻿using Cobros.API.Core.Model.DTO.Customer;
+using Cobros.API.Entities;
 
 namespace Cobros.API.Core.Model.DTO.Loan
 {
@@ -7,7 +8,7 @@ namespace Cobros.API.Core.Model.DTO.Loan
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public int CobroId { get; set; }
-        public int CustomerId { get; set; }
+        public CustomerSimpleDto Customer { get; set; }
         public int Value { get; set; }
         public int LoanInterest { get; set; }
         public int RoutePosition { get; set; }
