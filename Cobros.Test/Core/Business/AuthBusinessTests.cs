@@ -2,7 +2,6 @@
 using Cobros.API.Core.Model.DTO.Auth;
 using Cobros.API.Core.Model.Exceptions;
 using Cobros.API.Entities;
-using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 
 namespace Cobros.Test.Core.Business
