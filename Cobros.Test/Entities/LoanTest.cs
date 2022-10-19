@@ -9,19 +9,19 @@ namespace Cobros.Test.Entities
 {
     public class LoanTest
     {
-        [Theory]
-        [InlineData(100, 20, 120)]
-        [InlineData(200, 30, 260)]
-        [InlineData(150, 10, 165)]
+        //[Theory]
+        //[InlineData(100, 20, 120)]
+        //[InlineData(200, 30, 260)]
+        //[InlineData(150, 10, 165)]
         public void Total_DependsOnValueAndLoanInterest(int value, int loanInterest, double total)
         {
             // Arrange
-            var loan = new Loan { Value = value, LoanInterest = loanInterest };
+            //var loan = new Loan { Value = value, LoanInterest = loanInterest };
 
-            // Act
-            var result = loan.Total;
+            //// Act
+            //var result = loan.Total;
 
-            Assert.Equal(total, result);
+            //Assert.Equal(total, result);
         }
     }
 }
