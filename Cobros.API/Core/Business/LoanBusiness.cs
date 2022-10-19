@@ -114,5 +114,60 @@ namespace Cobros.API.Core.Business
                 throw new AppException("Cannot insert loan.");
             }
         }
+
+        public async Task UpdateRoutePosition(int id, LoanUpdateDto loanUpdateDto)
+        {
+            var existing = await _unitOfWork.Loans.GetByIdAsync(id);
+
+            if (existing == null)
+                throw new AppException($"Loan with Id: {id} does not exist.");
+
+            if(User.Role == Role.USER)
+                if(!User.CobroIds.Contains(existing.CobroId))
+                    throw new AccessForbiddenException("Access Forbiden.");
+
+            int startPosition = existing.RoutePosition;
+            int targetPosition = loanUpdateDto.RoutePosition;
+
+            if (targetPosition <= 0)
+                throw new AppException("RoutePosition must be greater than 0.");
+                
+            if(targetPosition == startPosition)
+                return;
+
+            var cobroId = existing.CobroId;
+
+            if(targetPosition < startPosition)
+            {
+                try
+                {
+                    _unitOfWork.BeginTransaccion();
+
+                    for (int i = startPosition; i > targetPosition; i--)
+                    {
+                        var loan = await _unitOfWork.Loans.GetByCobroIdAndRoutePosition(cobroId, i-1);
+                        loan.RoutePosition = i;
+                        _unitOfWork.Loans.Update(loan);
+                    }
+
+                    existing.RoutePosition = targetPosition;
+                    _unitOfWork.Loans.Update(existing);
+                    await _unitOfWork.CompleteAsync();
+                    return;
+                }
+                catch (Exception)
+                {
+                    _unitOfWork.Rollback();
+                    throw new AppException($"Cannot reorder Cobro with ID: {existing.CobroId}");
+                }
+            }
+
+
+            //existing.RoutePosition = loanUpdateDto.RoutePosition;
+            //_unitOfWork.Loans.Update(existing);
+            //_unitOfWork.CompleteAsync();
+
+            throw new NotImplementedException();
+        }
     }
 }

@@ -54,5 +54,11 @@ namespace Cobros.API.Controllers
             var result = await _loanBusiness.GetByIdWithDetails(id);
             return Ok(result);
         }
+
+        [HttpPut("Loans/{id}")]
+        public async Task<IActionResult> UpdateRoutePosition(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
