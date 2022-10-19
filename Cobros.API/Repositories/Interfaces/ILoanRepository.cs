@@ -6,5 +6,6 @@ namespace Cobros.API.Repositories.Interfaces
     {
         Task<IEnumerable<Loan>> GetAllByCobroIdAndSortedByRoutePositionASC(int cobroId);
         Task<Loan> GetDetails(int id);
+        Task<Loan> GetByCobroIdAndRoutePosition(int cobroId, int routePosition);
     }
 }

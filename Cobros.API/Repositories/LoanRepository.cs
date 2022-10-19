@@ -20,6 +20,13 @@ namespace Cobros.API.Repositories
                 .ToListAsync();
         }
 
+        public Task<Loan> GetByCobroIdAndRoutePosition(int cobroId, int routePosition)
+        {
+            return _applicationDbContext
+                .Loans
+                .FirstOrDefaultAsync(l => l.CobroId == cobroId && l.RoutePosition == routePosition);
+        }
+
         public async Task<Loan> GetDetails(int id)
         {
             return await _applicationDbContext.Loans
